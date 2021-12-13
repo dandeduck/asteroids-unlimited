@@ -33,7 +33,6 @@ public class PlayerMoveable : MonoBehaviour
 
     private void MoveVertically(float input, float speed)
     {
-        Debug.Log(input + " " + (transform.position.z + speed) + " " + currentLevel.GetBorder().endZ);
         if (input > 0)
             transform.position = new Vector3(transform.position.x, transform.position.y, Mathf.Min(transform.position.z + speed, currentLevel.GetBorder().endZ));
         else if (input < 0)
