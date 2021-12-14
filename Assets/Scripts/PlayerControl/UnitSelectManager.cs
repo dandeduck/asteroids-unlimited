@@ -15,8 +15,14 @@ public class UnitSelectManager : MonoBehaviour
     private void Update()
     {
         // Physics.OverlapBox();
+
         if (Input.GetMouseButtonDown(0))
             OnLeftMouseClick();
+    }
+
+    public List<Unit> GetSelectedUnits()
+    {
+        return selectedUnits;
     }
 
     public void DeselectAll()
@@ -44,7 +50,7 @@ public class UnitSelectManager : MonoBehaviour
         Unit selected = MouseSelectedUnit();
 
         if (selected != null)
-            ReplaceSelection(selected);
+            OnUnitSelected(selected);
         else
             DeselectAll();
     }
@@ -64,11 +70,27 @@ public class UnitSelectManager : MonoBehaviour
         return null;
     }
 
+    private void OnUnitSelected(Unit unit)
+    {
+        if (Input.GetKey(KeyCode.LeftControl))
+            SelectUnit(unit);
+        else
+            ReplaceSelection(unit);
+    }
+
     private void ReplaceSelection(Unit unit)
     {
         if (unit != null  && !(selectedUnits.Count == 1 && unit.Equals(selectedUnits[0])))
         {
             DeselectAll();
+            SelectUnit(unit);
+        }
+    }
+
+    private void SelectUnit(Unit unit)
+    {
+        if (!selectedUnits.Contains(unit))
+        {
             selectedUnits.Add(unit);
             unit.Select();
         }
@@ -78,11 +100,9 @@ public class UnitSelectManager : MonoBehaviour
     {
         DeselectAll();
 
-        selectedUnits.AddRange(units);
-
         foreach (Unit unit in units)
         {
-            unit.Select();
+            SelectUnit(unit);
         }
     }
 }
