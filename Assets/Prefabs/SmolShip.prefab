@@ -12,7 +12,8 @@ GameObject:
   - component: {fileID: 2498298626716016869}
   - component: {fileID: 382605945899963439}
   - component: {fileID: 6227999112068612105}
-  m_Layer: 3
+  - component: {fileID: 4348164994266826286}
+  m_Layer: 6
   m_Name: SmolShip
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -101,3 +102,15 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 0.101723485
   m_Center: {x: 0.057477634, y: 0, z: 0.0039018104}
+--- !u!114 &4348164994266826286
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2184164887343560186}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9392d37ff60574a78a3948da3ba4039e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
