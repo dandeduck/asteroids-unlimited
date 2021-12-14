@@ -5,7 +5,7 @@ public class PlayerSpinable : MonoBehaviour
     [SerializeField] private float regularSpeed;
     [SerializeField] private float increasedSpeed;
 
-    private void Update()
+    private void LateUpdate()
     {
         float speed = Input.GetKey(KeyCode.LeftShift) ? increasedSpeed : regularSpeed;
         speed *= Time.deltaTime;

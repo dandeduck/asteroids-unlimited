@@ -18,7 +18,7 @@ public class Zoomable : MonoBehaviour
         angleX = transform.localEulerAngles.x;
     }
 
-    private void Update()
+    private void LateUpdate()
     {
         SetZoom();
 

@@ -11,7 +11,7 @@ public class PlayerMoveable : MonoBehaviour
         transform.position = currentLevel.GetPlayerSpawn();
     }
     
-    private void Update()
+    private void LateUpdate()
     {
         float horizontal = Input.GetAxisRaw("Horizontal");
         float vertical = Input.GetAxisRaw("Vertical");
