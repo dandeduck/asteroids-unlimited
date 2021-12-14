@@ -19,23 +19,44 @@ public class PlayerMoveable : MonoBehaviour
 
         speed *= Time.deltaTime;
 
-        MoveHorizontally(horizontal, speed);
-        MoveVertically(vertical, speed);
+        Vector3 travelDistance = HorizontalDistance(horizontal, speed) + VerticalDistance(vertical, speed);
+        transform.position = CalcEndPosition(travelDistance);
     }
 
-    private void MoveHorizontally(float input, float speed)
+    private Vector3 HorizontalDistance (float input, float speed)
     {
         if (input > 0)
-            transform.position = new Vector3(Mathf.Min(transform.position.x + speed, currentLevel.GetBorder().endX), transform.position.y, transform.position.z);
-        else if (input < 0)
-            transform.position = new Vector3(Mathf.Max(transform.position.x - speed, currentLevel.GetBorder().startX), transform.position.y, transform.position.z);
+            return transform.right * speed;
+        if (input < 0)
+            return transform.right * -speed;
+        
+        return Vector3.zero;
     }
 
-    private void MoveVertically(float input, float speed)
+    private Vector3 VerticalDistance (float input, float speed)
     {
         if (input > 0)
-            transform.position = new Vector3(transform.position.x, transform.position.y, Mathf.Min(transform.position.z + speed, currentLevel.GetBorder().endZ));
-        else if (input < 0)
-            transform.position = new Vector3(transform.position.x, transform.position.y, Mathf.Max(transform.position.z - speed, currentLevel.GetBorder().startZ));
+            return transform.forward * speed;
+        if (input < 0)
+            return transform.forward * -speed;
+        
+        return Vector3.zero;
+    }
+
+    private Vector3 CalcEndPosition(Vector3 travelDistance)
+    {
+        Vector3 endPosition = transform.position + travelDistance;
+
+        if (endPosition.x > currentLevel.GetBorder().endX)
+            endPosition.x = currentLevel.GetBorder().endX;
+        else if (endPosition.x < currentLevel.GetBorder().startX)
+            endPosition.x = currentLevel.GetBorder().startX;
+
+        if (endPosition.z > currentLevel.GetBorder().endZ)
+            endPosition.z = currentLevel.GetBorder().endZ;
+        else if (endPosition.z < currentLevel.GetBorder().startZ)
+            endPosition.z = currentLevel.GetBorder().startZ;
+
+        return endPosition;
     }
 }

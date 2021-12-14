@@ -10,9 +10,9 @@ public class PlayerSpinable : MonoBehaviour
         float speed = Input.GetKey(KeyCode.LeftShift) ? increasedSpeed : regularSpeed;
         speed *= Time.deltaTime;
 
-        if (Input.GetKey(KeyCode.E))
+        if (Input.GetKey(KeyCode.Q))
             speed *= -1;
-        if (speed > 0 && !Input.GetKey(KeyCode.Q))
+        if (speed > 0 && !Input.GetKey(KeyCode.E))
             speed = 0;
 
         transform.Rotate(Vector3.up * speed);
