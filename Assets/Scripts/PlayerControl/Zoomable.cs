@@ -33,9 +33,9 @@ public class Zoomable : MonoBehaviour
 
     private void SetZoom()
     {
-        if (Input.GetAxisRaw("Mouse ScrollWheel") > 0)
+        if (Input.mouseScrollDelta.y > 0 || Input.mouseScrollDelta.x > 0)
             ZoomIn();
-        else if (Input.GetAxisRaw("Mouse ScrollWheel") < 0)
+        else if (Input.mouseScrollDelta.y < 0 || Input.mouseScrollDelta.x < 0)
             ZoomOut();
     }
 
