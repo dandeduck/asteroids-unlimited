@@ -7,6 +7,11 @@ public class Ship : MonoBehaviour, Unit
         Debug.Log("Deselected " + gameObject.name);
     }
 
+    public int id()
+    {
+        return GetInstanceID();
+    }
+
     public void Kill()
     {
         throw new System.NotImplementedException();

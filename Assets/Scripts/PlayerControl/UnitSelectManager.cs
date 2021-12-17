@@ -1,51 +1,61 @@
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 public class UnitSelectManager : MonoBehaviour
 {
-    private List<Unit> selectedUnits;
+    private const int MIN_SELECT_SIZE = 40;
+
+    [SerializeField] private RectTransform selectionBox;
+
+    private Dictionary<int, Unit> selectedUnits;
+    private LayerMask unitLayer;
+    private bool dragSelect;
+
+    //trying
+    private Vector2 dragStart;
 
     private void Awake()
     {
-        selectedUnits = new List<Unit>();
+        selectedUnits = new Dictionary<int, Unit>();
+        unitLayer = LayerMask.GetMask("Units");
     }
 
     private void Update()
     {
         // Physics.OverlapBox();
-
         if (Input.GetMouseButtonDown(0))
-            OnLeftMouseClick();
-    }
-
-    public List<Unit> GetSelectedUnits()
-    {
-        return selectedUnits;
-    }
-
-    public void DeselectAll()
-    {
-        foreach (Unit unit in selectedUnits)
         {
-            unit.Deselect();
+            OnClickSelect();
+            dragStart = Input.mousePosition;
+        }
+        
+        if (Input.GetMouseButton(0))
+        {
+            dragSelect = true;
+            UpdateSelectionBox();
         }
 
-        selectedUnits.Clear();
-    }
-
-    public void DeselectUnits(List<Unit> units)
-    {
-        selectedUnits = selectedUnits.Except(units).ToList();
-
-        foreach (Unit unit in units)
+        else if (Input.GetMouseButtonUp(0))
         {
-            unit.Deselect();
+            if (!dragSelect)
+                OnClickSelect();
+            else
+            {
+
+                selectionBox.sizeDelta = new Vector2(0, 0);
+            }
         }
     }
 
-    private void OnLeftMouseClick()
+    private void UpdateSelectionBox()
+    {
+        Vector2 mousePos = Input.mousePosition;
+
+        selectionBox.sizeDelta = VectorUtil.Abs(mousePos - dragStart);
+        selectionBox.anchoredPosition = dragStart + (mousePos - dragStart) / 2;
+    }
+
+    private void OnClickSelect()
     {
         Unit selected = MouseSelectedUnit();
 
@@ -60,7 +70,7 @@ public class UnitSelectManager : MonoBehaviour
         Ray cameraRay = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit = new RaycastHit();
 
-        Physics.Raycast(cameraRay, out hit, Camera.main.farClipPlane, LayerMask.GetMask("Units"));
+        Physics.Raycast(cameraRay, out hit, Camera.main.farClipPlane, unitLayer);
 
         Collider collider = hit.collider;
 
@@ -80,7 +90,7 @@ public class UnitSelectManager : MonoBehaviour
 
     private void ReplaceSelection(Unit unit)
     {
-        if (unit != null  && !(selectedUnits.Count == 1 && unit.Equals(selectedUnits[0])))
+        if (unit != null  && !(selectedUnits.Count == 1 && selectedUnits.ContainsKey(unit.id())))
         {
             DeselectAll();
             SelectUnit(unit);
@@ -89,10 +99,22 @@ public class UnitSelectManager : MonoBehaviour
 
     private void SelectUnit(Unit unit)
     {
-        if (!selectedUnits.Contains(unit))
+        if (!selectedUnits.ContainsKey(unit.id()))
         {
-            selectedUnits.Add(unit);
+            selectedUnits.Add(unit.id(), unit);
             unit.Select();
+        }
+    }
+
+    private void SelectUnits(List<Unit> units)
+    {
+        foreach (Unit unit in units)
+        {
+            if (!selectedUnits.ContainsKey(unit.id()))
+            {
+                selectedUnits.Add(unit.id(), unit);
+                unit.Select();
+            }
         }
     }
 
@@ -105,4 +127,32 @@ public class UnitSelectManager : MonoBehaviour
             SelectUnit(unit);
         }
     }
+
+    public Dictionary<int, Unit> GetSelectedUnits()
+    {
+        return selectedUnits;
+    }
+
+    public void DeselectAll()
+    {
+        foreach (Unit unit in selectedUnits.Values)
+        {
+            unit.Deselect();
+        }
+
+        selectedUnits.Clear();
+    }
+
+    public void DeselectUnits(List<Unit> units)
+    {
+        foreach (Unit unit in units)
+        {
+            if (selectedUnits.ContainsKey(unit.id()))
+            {
+                selectedUnits.Remove(unit.id());
+                unit.Deselect();
+            }
+        }
+    }
+
 }
