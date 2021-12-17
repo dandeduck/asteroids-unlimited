@@ -3,15 +3,13 @@ using UnityEngine;
 
 public class UnitSelectManager : MonoBehaviour
 {
-    private const int MIN_SELECT_SIZE = 40;
+    private const int DRAG_SELECT_HEIGHT = 5;
 
     [SerializeField] private RectTransform selectionBox;
 
     private Dictionary<int, Unit> selectedUnits;
     private LayerMask unitLayer;
     private bool dragSelect;
-
-    //trying
     private Vector2 dragStart;
 
     private void Awake()
@@ -22,7 +20,6 @@ public class UnitSelectManager : MonoBehaviour
 
     private void Update()
     {
-        // Physics.OverlapBox();
         if (Input.GetMouseButtonDown(0))
         {
             OnClickSelect();
@@ -37,13 +34,10 @@ public class UnitSelectManager : MonoBehaviour
 
         else if (Input.GetMouseButtonUp(0))
         {
-            if (!dragSelect)
-                OnClickSelect();
-            else
-            {
+            selectionBox.sizeDelta = new Vector2(0, 0);
+            dragSelect = false;
 
-                selectionBox.sizeDelta = new Vector2(0, 0);
-            }
+            OnDragSelect();
         }
     }
 
@@ -53,6 +47,25 @@ public class UnitSelectManager : MonoBehaviour
 
         selectionBox.sizeDelta = VectorUtil.Abs(mousePos - dragStart);
         selectionBox.anchoredPosition = dragStart + (mousePos - dragStart) / 2;
+    }
+
+    private void OnDragSelect()
+    {
+        Vector2 screenCenter = selectionBox.anchoredPosition;
+        Vector2 screenCorner = selectionBox.anchoredPosition + selectionBox.sizeDelta / 2;
+
+        Vector3 worldCenter = VectorUtil.ScreenPosToGround(screenCenter);
+        Vector3 worldCorner = VectorUtil.ScreenPosToGround(screenCorner);
+
+        Vector3 halfExtents = worldCorner - worldCenter;
+        halfExtents.y = DRAG_SELECT_HEIGHT;
+
+        Collider[] colliders = Physics.OverlapBox(worldCenter, halfExtents, Camera.main.transform.rotation);
+
+        foreach (Collider collider in colliders)
+        {
+            collider.GetComponent<Unit>().Select();    
+        }
     }
 
     private void OnClickSelect()

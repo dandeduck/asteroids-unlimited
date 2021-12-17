@@ -4,7 +4,7 @@ public class Ship : MonoBehaviour, Unit
 {
     public void Deselect()
     {
-        Debug.Log("Deselected " + gameObject.name);
+        GetComponentInChildren<Renderer>().material.color = Color.black;
     }
 
     public int id()
@@ -24,6 +24,6 @@ public class Ship : MonoBehaviour, Unit
 
     public void Select()
     {
-        Debug.Log("Selected " + gameObject.name);
+        GetComponentInChildren<Renderer>().material.color = Color.red;
     }
 }
