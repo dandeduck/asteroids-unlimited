@@ -1,10 +1,14 @@
+using UnityEngine;
+
 public interface Unit
 {
-    void Select();
-    void Deselect();
+    void OnSelect();
+    void OnDeselect();
     
     void OnAction();
-    void Kill();
+    void OnKill();
+    bool OnDamageTaken(float damage);
 
-    int id();
+    int Id();
+    Transform Transform();
 }
