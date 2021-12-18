@@ -1,10 +1,18 @@
+using UnityEngine;
+
 public interface Unit
 {
-    void Select();
-    void Deselect();
+    void OnSelect();
+    void OnDeselect();
     
     void OnAction();
-    void Kill();
+    void OnKill();
+    bool OnDamageTaken(float damage);
 
-    int id();
+    Transform Transform();
+    
+    int Id()
+    {
+        return Transform().GetInstanceID();
+    }
 }

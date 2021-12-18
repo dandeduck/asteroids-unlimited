@@ -1,20 +1,16 @@
 using UnityEngine;
 
+[System.Serializable]
 public class Ship : MonoBehaviour, Unit
 {
-    public void Deselect()
+    public void OnDeselect()
     {
         GetComponentInChildren<Renderer>().material.color = Color.black;
     }
 
-    public int id()
+    public void OnSelect()
     {
-        return GetInstanceID();
-    }
-
-    public void Kill()
-    {
-        throw new System.NotImplementedException();
+        GetComponentInChildren<Renderer>().material.color = Color.red;
     }
 
     public void OnAction()
@@ -22,8 +18,18 @@ public class Ship : MonoBehaviour, Unit
         throw new System.NotImplementedException();
     }
 
-    public void Select()
+    public void OnKill()
     {
-        GetComponentInChildren<Renderer>().material.color = Color.red;
+        throw new System.NotImplementedException();
+    }
+
+    public bool OnDamageTaken(float damage)
+    {
+        throw new System.NotImplementedException();
+    }
+
+    public Transform Transform()
+    {
+        return transform;
     }
 }
