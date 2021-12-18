@@ -28,11 +28,6 @@ public class Ship : MonoBehaviour, Unit
         throw new System.NotImplementedException();
     }
 
-    public int Id()
-    {
-        return GetInstanceID();
-    }
-
     public Transform Transform()
     {
         return transform;

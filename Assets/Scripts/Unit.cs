@@ -9,6 +9,10 @@ public interface Unit
     void OnKill();
     bool OnDamageTaken(float damage);
 
-    int Id();
     Transform Transform();
+    
+    int Id()
+    {
+        return Transform().GetInstanceID();
+    }
 }

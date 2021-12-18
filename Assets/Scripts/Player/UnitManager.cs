@@ -24,6 +24,11 @@ public class UnitManager : MonoBehaviour
         return units.Values.ToList().AsReadOnly();
     }
 
+    public bool Contains(Unit unit)
+    {
+        return units.ContainsKey(unit.Id());
+    }
+
     public void AddUnit(Unit unit)
     {
         if (!units.ContainsKey(unit.Id()))

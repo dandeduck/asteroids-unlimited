@@ -41,6 +41,9 @@ public class UnitSelector : MonoBehaviour
 
         else if (Input.GetMouseButtonUp(0))
         {
+            if (!ChainSelect())
+                DeselectAll();
+
             if (!dragSelect)
                 OnClickSelect();
             else
@@ -65,9 +68,6 @@ public class UnitSelector : MonoBehaviour
     {
         Vector2 min = selectionBox.anchoredPosition - selectionBox.sizeDelta / 2;
         Vector2 max = selectionBox.anchoredPosition + selectionBox.sizeDelta / 2;
-
-        if (!ChainSelect())
-            DeselectAll();
             
         SelectUnitsBasedOnScreenPosition(min, max);
     }
@@ -89,7 +89,7 @@ public class UnitSelector : MonoBehaviour
 
         if (selected != null)
             OnUnitSelected(selected);
-        else
+        else if (!ChainSelect())
             DeselectAll();
     }
 
@@ -110,26 +110,14 @@ public class UnitSelector : MonoBehaviour
 
     private void OnUnitSelected(Unit unit)
     {
-        if (ChainSelect())
+        if (unitManager.Contains(unit))
             SelectUnit(unit);
-        else
-            ReplaceSelection(unit);
     }
 
     private bool ChainSelect()
     {
         return Input.GetKey(KeyCode.LeftControl);
     }
-
-    private void ReplaceSelection(Unit unit)
-    {
-        if (unit != null  && !(selectedUnits.Count == 1 && selectedUnits.ContainsKey(unit.Id())))
-        {
-            DeselectAll();
-            SelectUnit(unit);
-        }
-    }
-    
 
     private void SelectUnits(List<Unit> units)
     {
