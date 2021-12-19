@@ -95,15 +95,10 @@ public class UnitSelector : MonoBehaviour
 
     private Unit MouseSelectedUnit()
     {
-        Ray cameraRay = cam.ScreenPointToRay(Input.mousePosition);
-        RaycastHit hit = new RaycastHit();
-
-        Physics.Raycast(cameraRay, out hit, cam.farClipPlane, unitLayer);
-
-        Collider collider = hit.collider;
+        Collider collider = VectorUtil.MousePosRaycast(cam, unitLayer);
 
         if (collider != null)
-            return hit.collider.GetComponent<Unit>();
+            return collider.GetComponent<Unit>();
         
         return null;
     }

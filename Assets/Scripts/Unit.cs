@@ -5,7 +5,8 @@ public interface Unit
     void OnSelect();
     void OnDeselect();
     
-    void OnAction();
+    void OnAttack(Unit unit);
+    void OnMove(Vector3 position);
     void OnKill();
     bool OnDamageTaken(float damage);
 

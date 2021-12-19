@@ -13,7 +13,12 @@ public class Ship : MonoBehaviour, Unit
         GetComponentInChildren<Renderer>().material.color = Color.red;
     }
 
-    public void OnAction()
+    public void OnAttack(Unit unit)
+    {
+        throw new System.NotImplementedException();
+    }
+
+    public void OnMove(Vector3 position)
     {
         throw new System.NotImplementedException();
     }

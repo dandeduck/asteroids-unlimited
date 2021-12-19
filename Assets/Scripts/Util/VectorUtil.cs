@@ -14,9 +14,9 @@ public static class VectorUtil
         return new Vector2(Mathf.Abs(vector.x), Mathf.Abs(vector.y));
     }
 
-    public static Vector3 ScreenPosToGround(Vector2 screen)
+    public static Vector3 MousePosToGround(Camera camera)
     {
-        return ScreenPosToGround(screen, Camera.main);
+        return ScreenPosToGround(Input.mousePosition, camera);
     }
 
     public static Vector3 ScreenPosToGround(Vector2 screen, Camera camera)
@@ -28,6 +28,21 @@ public static class VectorUtil
             return ray.GetPoint(distance);
 
         return Vector3.zero;
+    }
+
+    public static Collider MousePosRaycast(Camera camera, LayerMask layer)
+    {
+        return ScreenPosRaycast(Input.mousePosition, camera, layer);
+    }
+
+    public static Collider ScreenPosRaycast(Vector2 screen, Camera camera, LayerMask layer)
+    {
+        Ray cameraRay = camera.ScreenPointToRay(screen);
+        RaycastHit hit = new RaycastHit();
+
+        Physics.Raycast(cameraRay, out hit, camera.farClipPlane, layer);
+
+        return hit.collider;
     }
 
     public static bool IsInsideRect(Vector2 pos, Vector2 rectMin, Vector2 rectMax)
