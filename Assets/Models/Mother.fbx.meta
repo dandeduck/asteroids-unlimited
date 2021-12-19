@@ -1,14 +1,31 @@
 fileFormatVersion: 2
-guid: 9b81b3d43540a4c36ade813b007ab4d1
+guid: 0de5693516ce3f348a081db5f05dc361
 ModelImporter:
   serializedVersion: 21202
-  internalIDToNameTable: []
+  internalIDToNameTable:
+  - first:
+      74: 1398805738638354733
+    second: Radar|Cube.002Action
+  - first:
+      74: -3422684800678023910
+    second: Radar|Cube.002Action.001
+  - first:
+      74: -2923058027564519766
+    second: Radar|Cube.002Action.002
+  - first:
+      74: -1939078118398072908
+    second: Radar|Cube.002Action.003
   externalObjects:
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
-      name: Emmison.001
+      name: Emmison
     second: {fileID: 2100000, guid: 826ed5934b307da4aa3aa8b0452cee99, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Holograpic
+    second: {fileID: 2100000, guid: 9f7275b4fa44dd8419a11c256aa570ac, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0

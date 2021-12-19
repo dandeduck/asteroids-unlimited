@@ -5,6 +5,8 @@
         "**/.git":true,
         "**/.gitmodules":true,
         "**/*.booproj":true,
+        "**/*.csproj":true,
+        "**/*.sln":true,
         "**/*.pidb":true,
         "**/*.suo":true,
         "**/*.user":true,
