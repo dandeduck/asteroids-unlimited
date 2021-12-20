@@ -38,8 +38,13 @@ public class UnitDelegator : MonoBehaviour
     private void OnAttack(Unit target)
     {
         if (target != null)
-            foreach (Unit unit in selected)
-                unit.OnAttack(target);
+        {
+            if (manager.Contains(target))
+                OnMove(target.Transform().position);
+            else
+                foreach (Unit unit in selected)
+                    unit.OnAttack(target);
+        }
     }
 
     private void OnMove(Vector3 position)
@@ -47,6 +52,6 @@ public class UnitDelegator : MonoBehaviour
         selected.Sort((first, second) => (first.Transform().position - position).magnitude.CompareTo((second.Transform().position - position).magnitude));
         
         for (int i = 0; i < selected.Count; i++)
-            selected[i].OnMove(position, i);
+            selected[i].OnMove(position, i, selected.Count);
     }
 }

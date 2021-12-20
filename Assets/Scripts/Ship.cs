@@ -22,9 +22,9 @@ public class Ship : MonoBehaviour, Unit
         GetComponentInChildren<Renderer>().material.color = Color.red;
     }
 
-    public void OnMove(Vector3 position, int arrivalIndex)
+    public void OnMove(Vector3 position, int arrivalIndex, int arrivalAmount)
     {
-        agent.stoppingDistance = radius * 4 + Mathf.CeilToInt(arrivalIndex/2) * radius;
+        agent.stoppingDistance = radius * Mathf.Sqrt(arrivalAmount * 2) + Mathf.CeilToInt(arrivalIndex/2) * radius;
         agent.SetDestination(position);
     }
 

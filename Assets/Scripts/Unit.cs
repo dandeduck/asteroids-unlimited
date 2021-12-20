@@ -6,10 +6,10 @@ public interface Unit
     void OnDeselect();
     
     void OnAttack(Unit unit);
-    void OnMove(Vector3 position, int arrivalIndex);
+    void OnMove(Vector3 position, int arrivalIndex, int arrivalAmount);
     void OnMove(Vector3 position)
     {
-        OnMove(position, 0);
+        OnMove(position, 0, 1);
     }
 
     void OnKill();
