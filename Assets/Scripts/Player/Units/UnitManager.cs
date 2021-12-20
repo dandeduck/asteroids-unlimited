@@ -5,8 +5,6 @@ using UnityEngine;
 
 public class UnitManager : MonoBehaviour
 {
-    [SerializeField] private Ship[] initialUnits;
-
     private UnitSelector selector;
     private Dictionary<int, Unit> units;
 
@@ -14,14 +12,17 @@ public class UnitManager : MonoBehaviour
     {
         selector = GetComponent<UnitSelector>();
         units = new Dictionary<int, Unit>();
+    }
 
-        foreach (Unit unit in initialUnits)
+    private void Start()
+    {
+        foreach (Unit unit in Resources.FindObjectsOfTypeAll<Ship>())
             units.Add(unit.Id(), unit);
     }
 
-    public ReadOnlyCollection<Unit> GetUnits()
+    public List<Unit> GetUnits()
     {
-        return units.Values.ToList().AsReadOnly();
+        return units.Values.ToList();
     }
 
     public bool Contains(Unit unit)
