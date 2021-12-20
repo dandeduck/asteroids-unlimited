@@ -1,4 +1,4 @@
-using System.Collections.ObjectModel;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class UnitDelegator : MonoBehaviour
@@ -8,7 +8,7 @@ public class UnitDelegator : MonoBehaviour
     private Camera cam;
     private LayerMask unitMask;
 
-    ReadOnlyCollection<Unit> selected;
+    List<Unit> selected;
 
     private void Awake()
     {
@@ -44,7 +44,9 @@ public class UnitDelegator : MonoBehaviour
 
     private void OnMove(Vector3 position)
     {
-        foreach (Unit unit in selected)
-            unit.OnMove(position);
+        selected.Sort((first, second) => (first.Transform().position - position).magnitude.CompareTo((second.Transform().position - position).magnitude));
+        
+        for (int i = 0; i < selected.Count; i++)
+            selected[i].OnMove(position, i);
     }
 }

@@ -20,9 +20,9 @@ public class UnitManager : MonoBehaviour
             units.Add(unit.Id(), unit);
     }
 
-    public ReadOnlyCollection<Unit> GetUnits()
+    public List<Unit> GetUnits()
     {
-        return units.Values.ToList().AsReadOnly();
+        return units.Values.ToList();
     }
 
     public bool Contains(Unit unit)

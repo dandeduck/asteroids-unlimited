@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using UnityEngine;
 
@@ -143,9 +142,9 @@ public class UnitSelector : MonoBehaviour
         }
     }
 
-    public ReadOnlyCollection<Unit> GetSelectedUnits()
+    public List<Unit> GetSelectedUnits()
     {
-        return selectedUnits.Values.ToList().AsReadOnly();
+        return selectedUnits.Values.ToList();
     }
 
     public void DeselectAll()
