@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 2270612297255531501}
   - component: {fileID: 7637438030621581676}
   - component: {fileID: 1421434284561919969}
+  - component: {fileID: 2119740882044841093}
   m_Layer: 6
   m_Name: SmolShip
   m_TagString: Untagged
@@ -87,6 +88,22 @@ NavMeshAgent:
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
+--- !u!54 &2119740882044841093
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2270612297255531503}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0
+  m_UseGravity: 0
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1 &5072542872296716270
 GameObject:
   m_ObjectHideFlags: 0
