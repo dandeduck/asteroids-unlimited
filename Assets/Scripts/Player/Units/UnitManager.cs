@@ -13,10 +13,12 @@ public class UnitManager : MonoBehaviour
         units = new Dictionary<int, Unit>();
     }
 
+    //This code is temporary. It is to be used until proper enemy system is implemented
     private void Start()
     {
-        foreach (Unit unit in Resources.FindObjectsOfTypeAll<Ship>())
-            units.Add(unit.Id(), unit);
+        foreach (Ship ship in Object.FindObjectsOfType<Ship>())
+            if (ship.Manager().GetInstanceID() == GetInstanceID())
+                units.Add(((Unit)ship).Id(), ship);
     }
 
     public List<Unit> GetUnits()

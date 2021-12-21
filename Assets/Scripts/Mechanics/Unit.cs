@@ -8,7 +8,7 @@ public interface Unit
     void Move(Vector3 position, int arrivalIndex, int arrivalAmount);
     void Move(Vector3 position)
     {
-        Move(position, 0, 1);
+        Move(position, 0, 0);
     }
 
     void Attack(Unit unit, bool chase);

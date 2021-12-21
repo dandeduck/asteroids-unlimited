@@ -6,6 +6,7 @@ public class AttackZone : MonoBehaviour
 {
     private Dictionary<int, Unit> units;
     private float radius;
+    private UnitManager manager;
 
     private void Awake()
     {
@@ -13,12 +14,18 @@ public class AttackZone : MonoBehaviour
         radius = GetComponent<SphereCollider>().radius;
     }
 
+    private void Start()
+    {
+        manager = GetComponentInParent<Ship>().Manager();
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         Unit unit = other.GetComponent<Unit>();
 
         if (unit != null)
-            units.Add(unit.Id(), unit);
+            if (!manager.Contains(unit))
+                units.Add(unit.Id(), unit);
     }
 
     private void OnTriggerExit(Collider other)
@@ -37,7 +44,7 @@ public class AttackZone : MonoBehaviour
 
     public bool IsOutside(Unit unit)
     {
-        return units.ContainsKey(unit.Id());
+        return !units.ContainsKey(unit.Id());
     }
 
     public float GetRadius()

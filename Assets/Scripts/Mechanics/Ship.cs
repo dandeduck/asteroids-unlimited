@@ -18,7 +18,7 @@ public class Ship : MonoBehaviour, Unit
     private void Awake()
     {
         agent = GetComponent<NavMeshAgent>();
-        attackZone = GetComponent<AttackZone>();
+        attackZone = GetComponentInChildren<AttackZone>();
         radius = agent.radius;
     }
 
@@ -32,9 +32,21 @@ public class Ship : MonoBehaviour, Unit
         GetComponentInChildren<Renderer>().material.color = Color.red;
     }
 
+    public void Move(Unit unit)
+    {
+        Move(unit.Transform().position);
+    }
+
+    public void Move(Vector3 position)
+    {
+        Move(position, 0, 0);
+    }
+
     public void Move(Vector3 position, int arrivalIndex, int arrivalAmount)
     {
         agent.stoppingDistance = radius * Mathf.Sqrt(arrivalAmount * 2) + Mathf.CeilToInt(arrivalIndex/2) * radius;
+        agent.isStopped = false;
+
         agent.SetDestination(position);
     }
 
@@ -48,9 +60,10 @@ public class Ship : MonoBehaviour, Unit
 
     public void Stop()
     {
-        agent.isStopped = true;
-        StopCoroutine(combat);
+        if (combat != null)
+            StopCoroutine(combat);
 
+        agent.isStopped = true;
         inCombat = false;
     }
 
@@ -63,8 +76,10 @@ public class Ship : MonoBehaviour, Unit
     {
         health -= damage;
 
-        if (damage < 0)
+        if (damage <= 0)
             manager.KillUnit(this);
+
+        Debug.Log(name + " Took damage");
     }
 
     public Transform Transform()
@@ -75,6 +90,12 @@ public class Ship : MonoBehaviour, Unit
     public bool IsAlive()
     {
         return health > 0;
+    }
+    
+    //This code is temporary. It is to be used until proper enemy system is implemented
+    public UnitManager Manager()
+    {
+        return manager;
     }
 
     public float GetDamagePerSecond()
@@ -89,52 +110,66 @@ public class Ship : MonoBehaviour, Unit
 
     private void OnAttack(Unit unit)
     {
-        if (!IsMoving())
-            Debug.Log(gameObject.name + " is attacking " + unit.Transform().name);
+        Debug.Log(gameObject.name + " is attacking " + unit.Transform().name);
     }
 
-    private IEnumerator Combat(Unit unit, bool chase)
+    private IEnumerator Combat(Unit unit, bool shouldChase)
     {
+        bool isChasing = false;
+
         inCombat = true;
 
-        if (!unit.IsAlive())
-            EndCombat();
-
-        if (attackZone.IsOutside(unit))
+        while (unit.IsAlive())
         {
-            if (chase)
-                Chase(unit);
+            if (attackZone.IsOutside(unit))
+            {
+                if (shouldChase)
+                {
+                    isChasing = true;
+                    yield return Chase(unit);
+                }
+                else
+                {
+                    inCombat = false;
+                    yield break;
+                }
+            }
             else
-                EndCombat();
-        }
-        else
-            unit.TakeDamage(damage);
+            {
+                OnAttack(unit);
+                unit.TakeDamage(damage);
+            }
 
-        yield return new WaitForSeconds(fireRateSeconds);
+            if (isChasing)
+            {
+                isChasing = false;
+                yield return null;
+            }
+            else
+                yield return new WaitForSeconds(1/fireRateSeconds);
+        }
+
+        inCombat = false;
+        yield break;
     }
 
-    private void Chase(Unit unit)
+    private IEnumerator Chase(Unit unit)
     {
-        unit.Move(unit.Transform().position);
+        Move(unit);
 
-        while (!attackZone.IsOutside(unit))
+        while (attackZone.IsOutside(unit))
         {
             Vector3 unitPos = unit.Transform().position;
 
             if ((agent.destination - unitPos).magnitude > attackZone.GetRadius())
-                unit.Move(unitPos);
+                Move(unitPos);
+            yield return null;
         }
 
         agent.isStopped = true;
     }
 
-    private IEnumerator EndCombat()
-    {
-        inCombat = false;
-        yield break;
-    }
-
-    private bool IsMoving()
+    public bool IsMoving()
     {
         return !agent.isStopped;
     }
