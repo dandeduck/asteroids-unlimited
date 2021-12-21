@@ -58,10 +58,15 @@ public class Ship : MonoBehaviour, Unit
         StartCoroutine(combat);
     }
 
-    public void Stop()
+    public void StopCombat()
     {
         if (combat != null)
             StopCoroutine(combat);
+    }
+
+    public void Stop()
+    {
+        StopCombat();
 
         agent.isStopped = true;
         inCombat = false;
@@ -119,7 +124,7 @@ public class Ship : MonoBehaviour, Unit
 
         inCombat = true;
 
-        while (unit.IsAlive())
+        while (unit != null && unit.IsAlive())
         {
             if (attackZone.IsOutside(unit))
             {
@@ -157,7 +162,7 @@ public class Ship : MonoBehaviour, Unit
     {
         Move(unit);
 
-        while (attackZone.IsOutside(unit))
+        while (unit != null && unit.IsAlive() && attackZone.IsOutside(unit))
         {
             Vector3 unitPos = unit.Object().transform.position;
 

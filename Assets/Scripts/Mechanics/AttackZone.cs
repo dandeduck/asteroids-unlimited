@@ -4,27 +4,36 @@ using UnityEngine;
 
 public class AttackZone : MonoBehaviour
 {
-    private Dictionary<int, Unit> units;
+    private Dictionary<int, Unit> attackableUnits;
     private float radius;
     private UnitManager manager;
+    private Ship ship;
 
     private void Awake()
     {
-        units = new Dictionary<int, Unit>();
+        attackableUnits = new Dictionary<int, Unit>();
         radius = GetComponent<SphereCollider>().radius;
+        ship = GetComponentInParent<Ship>();
+        manager = ship.Manager();
     }
 
-    private void Start()
+    private void Update()
     {
-        manager = GetComponentInParent<Ship>().Manager();
+        if (!ship.IsInCombat() && attackableUnits.Count > 0)
+        {
+            List<Unit> units = attackableUnits.Values.ToList();
+            UnitsUtil.SortUnitsByDistance(units, transform.position);
+            ship.Attack(units[0], true); // can be false also.... may depend on ship or something
+        }
     }
 
     private void OnTriggerEnter(Collider other)
     {
         Unit unit = other.GetComponent<Unit>();
+
         if (unit != null)
             if (!manager.Contains(unit))
-                units.Add(unit.Id(), unit);
+                attackableUnits.Add(unit.Id(), unit);
     }
 
     private void OnTriggerExit(Collider other)
@@ -32,18 +41,18 @@ public class AttackZone : MonoBehaviour
         Unit unit = other.GetComponent<Unit>();
 
         if (unit != null)
-            if (units.ContainsKey(unit.Id()))
-                units.Remove(unit.Id());
+            if (attackableUnits.ContainsKey(unit.Id()))
+                attackableUnits.Remove(unit.Id());
     }
 
     public Unit[] GetUnitsInside()
     {
-        return units.Values.ToArray();
+        return attackableUnits.Values.ToArray();
     }
 
     public bool IsOutside(Unit unit)
     {
-        return !units.ContainsKey(unit.Id());
+        return !attackableUnits.ContainsKey(unit.Id());
     }
 
     public float GetRadius()

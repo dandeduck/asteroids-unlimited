@@ -49,9 +49,12 @@ public class UnitDelegator : MonoBehaviour
 
     private void OnMove(Vector3 position)
     {
-        selected.Sort((first, second) => (first.Object().transform.position - position).magnitude.CompareTo((second.Object().transform.position - position).magnitude));
+        UnitsUtil.SortUnitsByDistance(selected, position);
         
         for (int i = 0; i < selected.Count; i++)
+        {
+            selected[i].StopCombat();
             selected[i].Move(position, i, selected.Count);
+        }
     }
 }
