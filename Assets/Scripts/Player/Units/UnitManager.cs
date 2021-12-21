@@ -43,6 +43,6 @@ public class UnitManager : MonoBehaviour
         unit.OnKill();
         units.Remove(unit.Id());
 
-        Destroy(unit.Transform(), Time.deltaTime);
+        Destroy(unit.Object(), Time.deltaTime);
     }
 }

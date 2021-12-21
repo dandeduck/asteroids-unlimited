@@ -34,7 +34,7 @@ public class Ship : MonoBehaviour, Unit
 
     public void Move(Unit unit)
     {
-        Move(unit.Transform().position);
+        Move(unit.Object().transform.position);
     }
 
     public void Move(Vector3 position)
@@ -76,15 +76,15 @@ public class Ship : MonoBehaviour, Unit
     {
         health -= damage;
 
-        if (damage <= 0)
+        if (health <= 0)
             manager.KillUnit(this);
 
-        Debug.Log(name + " Took damage");
+        Debug.Log(name + " Took damage now at " + health);
     }
 
-    public Transform Transform()
+    public GameObject Object()
     {
-        return transform;
+        return gameObject;
     }
 
     public bool IsAlive()
@@ -110,7 +110,7 @@ public class Ship : MonoBehaviour, Unit
 
     private void OnAttack(Unit unit)
     {
-        Debug.Log(gameObject.name + " is attacking " + unit.Transform().name);
+        Debug.Log(gameObject.name + " is attacking " + unit.Object().name);
     }
 
     private IEnumerator Combat(Unit unit, bool shouldChase)
@@ -159,7 +159,7 @@ public class Ship : MonoBehaviour, Unit
 
         while (attackZone.IsOutside(unit))
         {
-            Vector3 unitPos = unit.Transform().position;
+            Vector3 unitPos = unit.Object().transform.position;
 
             if ((agent.destination - unitPos).magnitude > attackZone.GetRadius())
                 Move(unitPos);

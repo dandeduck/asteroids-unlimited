@@ -22,7 +22,6 @@ public class AttackZone : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         Unit unit = other.GetComponent<Unit>();
-        Debug.Log("TRIGGERED " + other.name);
         if (unit != null)
             if (!manager.Contains(unit))
                 units.Add(unit.Id(), unit);

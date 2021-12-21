@@ -16,10 +16,10 @@ public interface Unit
     void TakeDamage(float damage);
     bool IsAlive();
 
-    Transform Transform();
+    GameObject Object();
     
     int Id()
     {
-        return Transform().GetInstanceID();
+        return Object().GetInstanceID();
     }
 }
