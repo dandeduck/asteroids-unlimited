@@ -5,15 +5,16 @@ public interface Unit
     void OnSelect();
     void OnDeselect();
     
-    void OnAttack(Unit unit);
-    void OnMove(Vector3 position, int arrivalIndex, int arrivalAmount);
-    void OnMove(Vector3 position)
+    void Move(Vector3 position, int arrivalIndex, int arrivalAmount);
+    void Move(Vector3 position)
     {
-        OnMove(position, 0, 1);
+        Move(position, 0, 1);
     }
 
+    void Attack(Unit unit, bool chase);
     void OnKill();
-    bool OnDamageTaken(float damage);
+    void TakeDamage(float damage);
+    bool IsAlive();
 
     Transform Transform();
     

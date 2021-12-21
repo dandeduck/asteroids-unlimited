@@ -43,7 +43,7 @@ public class UnitDelegator : MonoBehaviour
                 OnMove(target.Transform().position);
             else
                 foreach (Unit unit in selected)
-                    unit.OnAttack(target);
+                    unit.Attack(target, true);
         }
     }
 
@@ -52,6 +52,6 @@ public class UnitDelegator : MonoBehaviour
         selected.Sort((first, second) => (first.Transform().position - position).magnitude.CompareTo((second.Transform().position - position).magnitude));
         
         for (int i = 0; i < selected.Count; i++)
-            selected[i].OnMove(position, i, selected.Count);
+            selected[i].Move(position, i, selected.Count);
     }
 }
