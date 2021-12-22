@@ -53,7 +53,7 @@ MonoBehaviour:
   health: 100
   damage: 20
   fireRateSeconds: 1
-  combatTurnSpeed: 2
+  combatTurnSpeed: 3
 --- !u!135 &7637438030621581676
 SphereCollider:
   m_ObjectHideFlags: 0

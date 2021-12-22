@@ -137,10 +137,6 @@ public class Ship : MonoBehaviour, Unit
 
     private IEnumerator Combat(Unit unit, bool shouldChase)
     {
-        inChase = false;
-        inCombat = true;
-        target = unit;
-
         while (unit != null && unit.IsAlive())
         {
             if (attackZone.IsOutside(unit))
@@ -159,8 +155,19 @@ public class Ship : MonoBehaviour, Unit
             else
             {
                 inChase = false;
-                OnAttack(unit);
-                unit.TakeDamage(damage);
+
+                if (!inCombat)
+                {
+                    inCombat = true;
+                    yield return RotateTowards(unit);
+                    target = unit;
+                }
+
+                if (unit != null && unit.IsAlive())
+                {
+                    OnAttack(unit);
+                    unit.TakeDamage(damage);
+                }
             }
 
             if (inChase)
@@ -191,6 +198,18 @@ public class Ship : MonoBehaviour, Unit
         }
 
         agent.isStopped = true;
+    }
+
+    private IEnumerator RotateTowards(Unit unit)
+    {
+        Vector3 targetAdjusted = new Vector3(unit.Object().transform.position.x, transform.position.y, unit.Object().transform.position.z) - transform.position;
+        Quaternion wantedRotation = Quaternion.LookRotation(targetAdjusted, Vector3.up);
+
+        while (unit != null && unit.IsAlive() && Mathf.Abs(wantedRotation.eulerAngles.y - transform.rotation.eulerAngles.y) > 3)
+        {
+            transform.rotation = Quaternion.Slerp(transform.rotation, wantedRotation, Time.deltaTime * combatTurnSpeed);
+            yield return null;
+        }
     }
 
     public bool IsMoving()
