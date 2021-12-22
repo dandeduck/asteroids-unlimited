@@ -8,18 +8,38 @@ public class Ship : MonoBehaviour, Unit
     [SerializeField] private float health;
     [SerializeField] private float damage;
     [SerializeField] private float fireRateSeconds;
+    [SerializeField] private float combatTurnSpeed;
 
     private NavMeshAgent agent;
     private AttackZone attackZone;
     private float radius;
     private IEnumerator combat;
     private bool inCombat;
+    private bool inChase;
+    private Unit target;
 
     private void Awake()
     {
         agent = GetComponent<NavMeshAgent>();
         attackZone = GetComponentInChildren<AttackZone>();
         radius = agent.radius;
+
+        inCombat = false;
+        inChase = false;
+    }
+
+    private void Update()
+    {
+        if (target != null && target.IsAlive() && inCombat && !inChase)
+            LookAtTarget();
+    }
+
+    private void LookAtTarget()
+    {
+        Vector3 targetAdjusted = new Vector3(target.Object().transform.position.x, transform.position.y, target.Object().transform.position.z) - transform.position;
+        Quaternion wantedRotation = Quaternion.LookRotation(targetAdjusted, Vector3.up);
+
+        transform.rotation = Quaternion.Slerp(transform.rotation, wantedRotation, Time.deltaTime * combatTurnSpeed);
     }
 
     public void OnDeselect()
@@ -70,6 +90,7 @@ public class Ship : MonoBehaviour, Unit
 
         agent.isStopped = true;
         inCombat = false;
+        inChase = false;
     }
 
     public void OnKill()
@@ -116,9 +137,9 @@ public class Ship : MonoBehaviour, Unit
 
     private IEnumerator Combat(Unit unit, bool shouldChase)
     {
-        bool isChasing = false;
-
+        inChase = false;
         inCombat = true;
+        target = unit;
 
         while (unit != null && unit.IsAlive())
         {
@@ -126,7 +147,7 @@ public class Ship : MonoBehaviour, Unit
             {
                 if (shouldChase)
                 {
-                    isChasing = true;
+                    inChase = true;
                     yield return Chase(unit);
                 }
                 else
@@ -137,13 +158,14 @@ public class Ship : MonoBehaviour, Unit
             }
             else
             {
+                inChase = false;
                 OnAttack(unit);
                 unit.TakeDamage(damage);
             }
 
-            if (isChasing)
+            if (inChase)
             {
-                isChasing = false;
+                inChase = false;
                 yield return null;
             }
             else
@@ -164,7 +186,7 @@ public class Ship : MonoBehaviour, Unit
 
             if ((agent.destination - unitPos).magnitude > attackZone.GetRadius())
                 Move(unitPos);
-                
+
             yield return null;
         }
 
