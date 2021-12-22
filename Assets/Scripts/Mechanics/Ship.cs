@@ -74,7 +74,6 @@ public class Ship : MonoBehaviour, Unit
 
     public void OnKill()
     {
-        Debug.Log(gameObject.name + " dead");
     }
 
     public void TakeDamage(float damage)
@@ -83,8 +82,6 @@ public class Ship : MonoBehaviour, Unit
 
         if (health <= 0)
             manager.KillUnit(this);
-
-        Debug.Log(name + " Took damage now at " + health);
     }
 
     public GameObject Object()
@@ -115,7 +112,6 @@ public class Ship : MonoBehaviour, Unit
 
     private void OnAttack(Unit unit)
     {
-        Debug.Log(gameObject.name + " is attacking " + unit.Object().name);
     }
 
     private IEnumerator Combat(Unit unit, bool shouldChase)
@@ -168,6 +164,7 @@ public class Ship : MonoBehaviour, Unit
 
             if ((agent.destination - unitPos).magnitude > attackZone.GetRadius())
                 Move(unitPos);
+                
             yield return null;
         }
 

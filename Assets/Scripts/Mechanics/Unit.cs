@@ -18,7 +18,6 @@ public interface Unit
     bool IsAlive();
 
     GameObject Object();
-
     int Id()
     {
         return Object().GetInstanceID();

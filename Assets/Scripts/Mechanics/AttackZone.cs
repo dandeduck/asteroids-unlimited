@@ -21,10 +21,26 @@ public class AttackZone : MonoBehaviour
     {
         if (!ship.IsInCombat() && attackableUnits.Count > 0)
         {
+            attackableUnits = RemoveDestroyed();
             List<Unit> units = attackableUnits.Values.ToList();
-            UnitsUtil.SortUnitsByDistance(units, transform.position);
-            ship.Attack(units[0], true); // can be false also.... may depend on ship or something
+
+            if (units.Count > 0)
+            {
+                UnitsUtil.SortUnitsByDistance(units, transform.position);
+                ship.Attack(units[0], true); // can be false also.... may depend on ship or something
+            }
         }
+    }
+
+    private Dictionary<int, Unit> RemoveDestroyed()
+    {
+        Dictionary<int, Unit> units = new Dictionary<int, Unit>();
+
+        foreach (var pair in attackableUnits)
+            if (pair.Value != null && pair.Value.IsAlive())
+                units.Add(pair.Key, pair.Value);
+
+        return units;
     }
 
     private void OnTriggerEnter(Collider other)
