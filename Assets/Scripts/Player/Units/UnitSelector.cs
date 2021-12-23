@@ -75,7 +75,7 @@ public class UnitSelector : MonoBehaviour
     {
         foreach (Unit unit in unitManager.GetUnits())
         {
-            Vector2 screen = cam.WorldToScreenPoint(unit.Transform().position);
+            Vector2 screen = cam.WorldToScreenPoint(unit.Object().transform.position);
 
             if (VectorUtil.IsInsideRect(screen, min, max))
                 SelectUnit(unit);

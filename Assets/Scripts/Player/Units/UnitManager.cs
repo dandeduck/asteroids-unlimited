@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using UnityEngine;
 
@@ -14,10 +13,12 @@ public class UnitManager : MonoBehaviour
         units = new Dictionary<int, Unit>();
     }
 
+    //This code is temporary. It is to be used until proper enemy system is implemented
     private void Start()
     {
-        foreach (Unit unit in Resources.FindObjectsOfTypeAll<Ship>())
-            units.Add(unit.Id(), unit);
+        foreach (Ship ship in Object.FindObjectsOfType<Ship>())
+            if (ship.Manager().GetInstanceID() == GetInstanceID())
+                units.Add(((Unit)ship).Id(), ship);
     }
 
     public List<Unit> GetUnits()
@@ -36,19 +37,12 @@ public class UnitManager : MonoBehaviour
             units.Add(unit.Id(), unit);
     }
 
-    public void DamageUnit(Unit unit, float damage)
-    {
-        if (units.ContainsKey(unit.Id()))
-            if (unit.OnDamageTaken(damage))
-                KillUnit(unit);
-    }
-
-    private void KillUnit(Unit unit)
+    public void KillUnit(Unit unit)
     {
         selector.DeselectUnit(unit);
         unit.OnKill();
         units.Remove(unit.Id());
 
-        Destroy(unit.Transform(), Time.deltaTime);
+        Destroy(unit.Object(), Time.deltaTime);
     }
 }

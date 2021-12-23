@@ -38,15 +38,23 @@ public class UnitDelegator : MonoBehaviour
     private void OnAttack(Unit target)
     {
         if (target != null)
-            foreach (Unit unit in selected)
-                unit.OnAttack(target);
+        {
+            if (manager.Contains(target))
+                OnMove(target.Object().transform.position);
+            else
+                foreach (Unit unit in selected)
+                    unit.Attack(target, true);
+        }
     }
 
     private void OnMove(Vector3 position)
     {
-        selected.Sort((first, second) => (first.Transform().position - position).magnitude.CompareTo((second.Transform().position - position).magnitude));
+        UnitsUtil.SortUnitsByDistance(selected, position);
         
         for (int i = 0; i < selected.Count; i++)
-            selected[i].OnMove(position, i);
+        {
+            selected[i].StopCombat();
+            selected[i].Move(position, i, selected.Count);
+        }
     }
 }
