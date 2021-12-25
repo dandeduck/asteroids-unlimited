@@ -1,21 +1,21 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class UnitDelegator : MonoBehaviour
+public class ShipDelegator : MonoBehaviour
 {
-    private UnitSelector selector;
-    private UnitManager manager;
+    private ShipSelector selector;
+    private ShipManager manager;
     private Camera cam;
     private LayerMask unitMask;
 
-    List<Unit> selected;
+    List<Ship> selected;
 
     private void Awake()
     {
-        selector = GetComponent<UnitSelector>();
-        manager = GetComponent<UnitManager>();
+        selector = GetComponent<ShipSelector>();
+        manager = GetComponent<ShipManager>();
         cam = GetComponentInChildren<Camera>();
-        unitMask = LayerMask.GetMask("Units");
+        unitMask = LayerMask.GetMask("Ships");
     }
 
     private void LateUpdate()
@@ -26,30 +26,30 @@ public class UnitDelegator : MonoBehaviour
 
     private void OnAction()
     {
-        selected = selector.GetSelectedUnits();
+        selected = selector.GetSelectedShips();
         Collider collider = VectorUtil.MousePosRaycast(cam, unitMask);
 
         if (collider != null)
-            OnAttack(collider.GetComponent<Unit>());
+            OnAttack(collider.GetComponent<Ship>());
         else
             OnMove(VectorUtil.MousePosToGround(cam));
     }
 
-    private void OnAttack(Unit target)
+    private void OnAttack(Ship target)
     {
         if (target != null)
         {
             if (manager.Contains(target))
                 OnMove(target.Object().transform.position);
             else
-                foreach (Unit unit in selected)
+                foreach (Ship unit in selected)
                     unit.Attack(target, true);
         }
     }
 
     private void OnMove(Vector3 position)
     {
-        UnitsUtil.SortUnitsByDistance(selected, position);
+        ShipsUtil.SortShipsByDistance(selected, position);
         
         for (int i = 0; i < selected.Count; i++)
         {

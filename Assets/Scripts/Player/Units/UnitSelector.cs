@@ -2,27 +2,27 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class UnitSelector : MonoBehaviour
+public class ShipSelector : MonoBehaviour
 {
     private const int DRAG_SELECT_THRESHOLD = 40;
 
     [SerializeField] private RectTransform selectionBox;
 
-    private Dictionary<int, Unit> selectedUnits;
+    private Dictionary<int, Ship> selectedShips;
     private LayerMask unitLayer;
     private bool dragSelect;
     private Vector2 dragStart;
 
-    private UnitManager unitManager;
+    private ShipManager unitManager;
     private Camera cam;
 
     private void Awake()
     {
         cam = GetComponentInChildren<Camera>();
-        unitManager = GetComponent<UnitManager>();
+        unitManager = GetComponent<ShipManager>();
 
-        selectedUnits = new Dictionary<int, Unit>();
-        unitLayer = LayerMask.GetMask("Units");
+        selectedShips = new Dictionary<int, Ship>();
+        unitLayer = LayerMask.GetMask("Ships");
     }
 
     private void Update()
@@ -68,44 +68,44 @@ public class UnitSelector : MonoBehaviour
         Vector2 min = selectionBox.anchoredPosition - selectionBox.sizeDelta / 2;
         Vector2 max = selectionBox.anchoredPosition + selectionBox.sizeDelta / 2;
             
-        SelectUnitsBasedOnScreenPosition(min, max);
+        SelectShipsBasedOnScreenPosition(min, max);
     }
 
-    private void SelectUnitsBasedOnScreenPosition(Vector2 min, Vector2 max)
+    private void SelectShipsBasedOnScreenPosition(Vector2 min, Vector2 max)
     {
-        foreach (Unit unit in unitManager.GetUnits())
+        foreach (Ship unit in unitManager.GetShips())
         {
             Vector2 screen = cam.WorldToScreenPoint(unit.Object().transform.position);
 
             if (VectorUtil.IsInsideRect(screen, min, max))
-                SelectUnit(unit);
+                SelectShip(unit);
         }
     }
 
     private void OnClickSelect()
     {
-        Unit selected = MouseSelectedUnit();
+        Ship selected = MouseSelectedShip();
 
         if (selected != null)
-            OnUnitSelected(selected);
+            OnShipSelected(selected);
         else if (!ChainSelect())
             DeselectAll();
     }
 
-    private Unit MouseSelectedUnit()
+    private Ship MouseSelectedShip()
     {
         Collider collider = VectorUtil.MousePosRaycast(cam, unitLayer);
 
         if (collider != null)
-            return collider.GetComponent<Unit>();
+            return collider.GetComponent<Ship>();
         
         return null;
     }
 
-    private void OnUnitSelected(Unit unit)
+    private void OnShipSelected(Ship unit)
     {
         if (unitManager.Contains(unit))
-            SelectUnit(unit);
+            SelectShip(unit);
     }
 
     private bool ChainSelect()
@@ -113,59 +113,59 @@ public class UnitSelector : MonoBehaviour
         return Input.GetKey(KeyCode.LeftControl);
     }
 
-    private void SelectUnits(List<Unit> units)
+    private void SelectShips(List<Ship> units)
     {
-        foreach (Unit unit in units)
+        foreach (Ship unit in units)
         {
-            if (!selectedUnits.ContainsKey(unit.Id()))
+            if (!selectedShips.ContainsKey(unit.Id()))
             {
-                selectedUnits.Add(unit.Id(), unit);
+                selectedShips.Add(unit.Id(), unit);
                 unit.OnSelect();
             }
         }
     }
 
-    private void ReplaceSelection(List<Unit> units)
+    private void ReplaceSelection(List<Ship> units)
     {
         DeselectAll();
 
-        foreach (Unit unit in units)
-            SelectUnit(unit);
+        foreach (Ship unit in units)
+            SelectShip(unit);
     }
 
-    private void SelectUnit(Unit unit)
+    private void SelectShip(Ship unit)
     {
-        if (!selectedUnits.ContainsKey(unit.Id()))
+        if (!selectedShips.ContainsKey(unit.Id()))
         {
-            selectedUnits.Add(unit.Id(), unit);
+            selectedShips.Add(unit.Id(), unit);
             unit.OnSelect();
         }
     }
 
-    public List<Unit> GetSelectedUnits()
+    public List<Ship> GetSelectedShips()
     {
-        return selectedUnits.Values.ToList();
+        return selectedShips.Values.ToList();
     }
 
     public void DeselectAll()
     {
-        foreach (Unit unit in selectedUnits.Values)
+        foreach (Ship unit in selectedShips.Values)
             unit.OnDeselect();
 
-        selectedUnits.Clear();
+        selectedShips.Clear();
     }
 
-    public void DeselectUnits(List<Unit> units)
+    public void DeselectShips(List<Ship> units)
     {
-        foreach (Unit unit in units)
-            DeselectUnit(unit);   
+        foreach (Ship unit in units)
+            DeselectShip(unit);   
     }
 
-    public void DeselectUnit(Unit unit)
+    public void DeselectShip(Ship unit)
     {
-        if (selectedUnits.ContainsKey(unit.Id()))
+        if (selectedShips.ContainsKey(unit.Id()))
         {
-            selectedUnits.Remove(unit.Id());
+            selectedShips.Remove(unit.Id());
             unit.OnDeselect();
         }
     }

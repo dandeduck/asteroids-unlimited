@@ -1,6 +1,7 @@
 using UnityEngine;
+using UnityEngine.Events;
 
-public interface Unit
+public interface Ship
 {
     void OnSelect();
     void OnDeselect();
@@ -11,7 +12,7 @@ public interface Unit
         Move(position, 0, 0);
     }
 
-    void Attack(Unit unit, bool chase);
+    void Attack(Ship unit, bool chase);
     void OnKill();
     void TakeDamage(float damage);
     void StopCombat();
@@ -22,4 +23,6 @@ public interface Unit
     {
         return Object().GetInstanceID();
     }
+
+    void AddDeathListener(UnityAction action);
 }

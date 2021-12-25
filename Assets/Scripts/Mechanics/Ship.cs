@@ -1,10 +1,11 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.Events;
 
-public class Ship : MonoBehaviour, Unit
+public class Ship : MonoBehaviour, Ship
 {
-    [SerializeField] private UnitManager manager;
+    [SerializeField] private ShipManager manager;
     [SerializeField] private float health;
     [SerializeField] private float damage;
     [SerializeField] private float fireRateSeconds;
@@ -16,7 +17,8 @@ public class Ship : MonoBehaviour, Unit
     private IEnumerator combat;
     private bool inCombat;
     private bool inChase;
-    private Unit target;
+    private Ship target;
+    private UnityEvent death;
 
     private void Awake()
     {
@@ -52,7 +54,7 @@ public class Ship : MonoBehaviour, Unit
         GetComponentInChildren<Renderer>().material.color = Color.red;
     }
 
-    public void Move(Unit unit)
+    public void Move(Ship unit)
     {
         Move(unit.Object().transform.position);
     }
@@ -70,7 +72,7 @@ public class Ship : MonoBehaviour, Unit
         agent.SetDestination(position);
     }
 
-    public void Attack(Unit unit, bool chase)
+    public void Attack(Ship unit, bool chase)
     {   
         Stop();
 
@@ -95,6 +97,7 @@ public class Ship : MonoBehaviour, Unit
 
     public void OnKill()
     {
+        death.Invoke();
     }
 
     public void TakeDamage(float damage)
@@ -102,7 +105,10 @@ public class Ship : MonoBehaviour, Unit
         health -= damage;
 
         if (health <= 0)
-            manager.KillUnit(this);
+        {
+            OnKill();
+            manager.KillShip(this);
+        }
     }
 
     public GameObject Object()
@@ -116,7 +122,7 @@ public class Ship : MonoBehaviour, Unit
     }
     
     //This code is temporary. It is to be used until proper enemy system is implemented
-    public UnitManager Manager()
+    public ShipManager Manager()
     {
         return manager;
     }
@@ -131,11 +137,11 @@ public class Ship : MonoBehaviour, Unit
         return inCombat;
     }
 
-    private void OnAttack(Unit unit)
+    private void OnAttack(Ship unit)
     {
     }
 
-    private IEnumerator Combat(Unit unit, bool shouldChase)
+    private IEnumerator Combat(Ship unit, bool shouldChase)
     {
         while (unit != null && unit.IsAlive())
         {
@@ -183,7 +189,7 @@ public class Ship : MonoBehaviour, Unit
         yield break;
     }
 
-    private IEnumerator Chase(Unit unit)
+    private IEnumerator Chase(Ship unit)
     {
         Move(unit);
 
@@ -200,7 +206,7 @@ public class Ship : MonoBehaviour, Unit
         agent.isStopped = true;
     }
 
-    private IEnumerator RotateTowards(Unit unit)
+    private IEnumerator RotateTowards(Ship unit)
     {
         Vector3 targetAdjusted = new Vector3(unit.Object().transform.position.x, transform.position.y, unit.Object().transform.position.z) - transform.position;
         Quaternion wantedRotation = Quaternion.LookRotation(targetAdjusted, Vector3.up);
@@ -215,5 +221,10 @@ public class Ship : MonoBehaviour, Unit
     public bool IsMoving()
     {
         return !agent.isStopped;
+    }
+
+    public void AddDeathListener(UnityAction action)
+    {
+        death.AddListener(action);
     }
 }

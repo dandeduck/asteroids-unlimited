@@ -4,14 +4,14 @@ using UnityEngine;
 
 public class AttackZone : MonoBehaviour
 {
-    private Dictionary<int, Unit> attackableUnits;
+    private Dictionary<int, Ship> attackableShips;
     private float radius;
-    private UnitManager manager;
+    private ShipManager manager;
     private Ship ship;
 
     private void Awake()
     {
-        attackableUnits = new Dictionary<int, Unit>();
+        attackableShips = new Dictionary<int, Ship>();
         radius = GetComponent<SphereCollider>().radius;
         ship = GetComponentInParent<Ship>();
         manager = ship.Manager();
@@ -19,56 +19,54 @@ public class AttackZone : MonoBehaviour
 
     private void Update()
     {
-        if (!ship.IsInCombat() && attackableUnits.Count > 0)
+        if (!ship.IsInCombat() && attackableShips.Count > 0)
         {
-            attackableUnits = RemoveDestroyed();
-            List<Unit> units = attackableUnits.Values.ToList();
+            List<Ship> units = attackableShips.Values.ToList();
 
             if (units.Count > 0)
             {
-                UnitsUtil.SortUnitsByDistance(units, transform.position);
+                ShipsUtil.SortShipsByDistance(units, transform.position);
                 ship.Attack(units[0], true); // can be false also.... may depend on ship or something
             }
         }
     }
 
-    private Dictionary<int, Unit> RemoveDestroyed()
+    private void OnDestroyed()
     {
-        Dictionary<int, Unit> units = new Dictionary<int, Unit>();
-
-        foreach (var pair in attackableUnits)
-            if (pair.Value != null && pair.Value.IsAlive())
-                units.Add(pair.Key, pair.Value);
-
-        return units;
+        attackableShips.Remove
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        Unit unit = other.GetComponent<Unit>();
+        Ship unit = other.GetComponent<Ship>();
 
         if (unit != null)
+        {
             if (!manager.Contains(unit))
-                attackableUnits.Add(unit.Id(), unit);
+            {
+                attackableShips.Add(unit.Id(), unit);
+                
+            }
+        }
     }
 
     private void OnTriggerExit(Collider other)
     {
-        Unit unit = other.GetComponent<Unit>();
+        Ship unit = other.GetComponent<Ship>();
 
         if (unit != null)
-            if (attackableUnits.ContainsKey(unit.Id()))
-                attackableUnits.Remove(unit.Id());
+            if (attackableShips.ContainsKey(unit.Id()))
+                attackableShips.Remove(unit.Id());
     }
 
-    public Unit[] GetUnitsInside()
+    public Ship[] GetShipsInside()
     {
-        return attackableUnits.Values.ToArray();
+        return attackableShips.Values.ToArray();
     }
 
-    public bool IsOutside(Unit unit)
+    public bool IsOutside(Ship unit)
     {
-        return !attackableUnits.ContainsKey(unit.Id());
+        return !attackableShips.ContainsKey(unit.Id());
     }
 
     public float GetRadius()

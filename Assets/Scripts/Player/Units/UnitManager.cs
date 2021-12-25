@@ -2,15 +2,15 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class UnitManager : MonoBehaviour
+public class ShipManager : MonoBehaviour
 {
-    private UnitSelector selector;
-    private Dictionary<int, Unit> units;
+    private ShipSelector selector;
+    private Dictionary<int, Ship> units;
 
     private void Awake()
     {
-        selector = GetComponent<UnitSelector>();
-        units = new Dictionary<int, Unit>();
+        selector = GetComponent<ShipSelector>();
+        units = new Dictionary<int, Ship>();
     }
 
     //This code is temporary. It is to be used until proper enemy system is implemented
@@ -18,29 +18,28 @@ public class UnitManager : MonoBehaviour
     {
         foreach (Ship ship in Object.FindObjectsOfType<Ship>())
             if (ship.Manager().GetInstanceID() == GetInstanceID())
-                units.Add(((Unit)ship).Id(), ship);
+                units.Add(((Ship)ship).Id(), ship);
     }
 
-    public List<Unit> GetUnits()
+    public List<Ship> GetShips()
     {
         return units.Values.ToList();
     }
 
-    public bool Contains(Unit unit)
+    public bool Contains(Ship unit)
     {
         return units.ContainsKey(unit.Id());
     }
 
-    public void AddUnit(Unit unit)
+    public void AddShip(Ship unit)
     {
         if (!units.ContainsKey(unit.Id()))
             units.Add(unit.Id(), unit);
     }
 
-    public void KillUnit(Unit unit)
+    public void KillShip(Ship unit)
     {
-        selector.DeselectUnit(unit);
-        unit.OnKill();
+        selector.DeselectShip(unit);
         units.Remove(unit.Id());
 
         Destroy(unit.Object(), Time.deltaTime);
