@@ -39,7 +39,7 @@ public class Ship : MonoBehaviour
     {
         if (target != null && target.IsAlive() && inCombat && !inChase)
             LookAtTarget();
-        if (isMoving && agent.pathStatus==NavMeshPathStatus.PathComplete && agent.remainingDistance <= agent.stoppingDistance)
+        if (inCombat || (isMoving && agent.pathStatus==NavMeshPathStatus.PathComplete && agent.remainingDistance <= agent.stoppingDistance))
             isMoving = false;
     }
 
