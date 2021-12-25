@@ -29,7 +29,6 @@ public class Captureable : MonoBehaviour
     {
         if (capturer != null)
         {
-            Debug.Log("capturing!");
             foreach (ShipManager manager in captureProgress.Keys.ToList())
             {
                 float progress = captureProgress[manager];
@@ -43,8 +42,6 @@ public class Captureable : MonoBehaviour
             {
                 holder = capturer;
                 capturer = null;
-
-                Debug.Log("Now held by " + holder);
             }
         }
     }

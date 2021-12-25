@@ -9,7 +9,6 @@ public class FinanceManager : MonoBehaviour
     private void Update()
     {
         balance += passiveIncome * Time.deltaTime;
-        Debug.Log(balance);
     }
 
     public void AddMoney(float amount)
