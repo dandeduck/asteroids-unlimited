@@ -37,15 +37,8 @@ public class ShipManager : MonoBehaviour
             OnNewShip(ship);
     }
 
-    public LayerMask GetLayer()
-    {
-        return 1 << gameObject.layer;
-    }
-
     private void OnNewShip(Ship ship)
     {
-        ship.gameObject.layer = gameObject.layer;
-
         ships.Add(ship.GetInstanceID(), ship);
         ship.AddDeathListener(OnDestroyed);
     }

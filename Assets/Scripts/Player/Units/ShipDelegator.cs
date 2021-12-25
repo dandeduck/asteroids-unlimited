@@ -15,7 +15,7 @@ public class ShipDelegator : MonoBehaviour
         selector = GetComponent<ShipSelector>();
         manager = GetComponent<ShipManager>();
         cam = GetComponentInChildren<Camera>();
-        shipMask = manager.GetLayer();
+        shipMask = LayerMask.GetMask("Units");
     }
 
     private void LateUpdate()
