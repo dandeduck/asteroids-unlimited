@@ -39,7 +39,7 @@ public class Ship : MonoBehaviour
     {
         if (target != null && target.IsAlive() && inCombat && !inChase)
             LookAtTarget();
-        if (isMoving && agent.pathStatus == NavMeshPathStatus.PathComplete)
+        if (isMoving && agent.pathStatus==NavMeshPathStatus.PathComplete && agent.remainingDistance <= agent.stoppingDistance)
             isMoving = false;
     }
 
@@ -85,7 +85,6 @@ public class Ship : MonoBehaviour
         if (!isMoving)
         {
             Stop();
-
             combat = StartCoroutine(Combat(ship, chase));
         }
     }
@@ -101,7 +100,7 @@ public class Ship : MonoBehaviour
     {
         if (combat != null)
         {
-            StopCoroutine(combat);
+            StopAllCoroutines();
             inCombat = false;
             inChase = false;
             target = null;

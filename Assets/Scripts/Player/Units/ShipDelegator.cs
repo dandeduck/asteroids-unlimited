@@ -28,7 +28,6 @@ public class ShipDelegator : MonoBehaviour
     {
         selected = selector.GetSelectedShips();
         Collider collider = VectorUtil.MousePosRaycast(cam, enemyShipMask);
-        Debug.Log(collider);
 
         if (collider != null)
             OnAttack(collider.GetComponent<Ship>());
@@ -39,10 +38,8 @@ public class ShipDelegator : MonoBehaviour
     private void OnAttack(Ship target)
     {
         if (target != null)
-        {
             foreach (Ship ship in selected)
                 ship.Attack(target, true);
-        }
     }
 
     private void OnMove(Vector3 position)
