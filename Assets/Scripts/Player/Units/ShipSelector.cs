@@ -22,7 +22,7 @@ public class ShipSelector : MonoBehaviour
         shipManager = GetComponent<ShipManager>();
 
         selectedShips = new Dictionary<int, Ship>();
-        shipLayer = LayerMask.GetMask("Units");
+        shipLayer = shipManager.GetLayer();
     }
 
     private void Update()
@@ -86,7 +86,7 @@ public class ShipSelector : MonoBehaviour
     {
         Ship selected = MouseSelectedShip();
 
-        if (selected != null && shipManager.Contains(selected))
+        if (selected != null)
             OnShipSelected(selected);
         else if (!ChainSelect())
             DeselectAll();

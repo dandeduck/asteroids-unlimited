@@ -6,7 +6,7 @@ public class ShipDelegator : MonoBehaviour
     private ShipSelector selector;
     private ShipManager manager;
     private Camera cam;
-    private LayerMask shipMask;
+    private LayerMask enemyShipMask;
 
     List<Ship> selected;
 
@@ -15,7 +15,7 @@ public class ShipDelegator : MonoBehaviour
         selector = GetComponent<ShipSelector>();
         manager = GetComponent<ShipManager>();
         cam = GetComponentInChildren<Camera>();
-        shipMask = LayerMask.GetMask("Units");
+        enemyShipMask = ~(manager.GetLayer() | LayerMask.GetMask("NonUnits"));
     }
 
     private void LateUpdate()
@@ -27,7 +27,9 @@ public class ShipDelegator : MonoBehaviour
     private void OnAction()
     {
         selected = selector.GetSelectedShips();
-        Collider collider = VectorUtil.MousePosRaycast(cam, shipMask);
+        Collider collider = VectorUtil.MousePosRaycast(cam, enemyShipMask);
+
+        Debug.Log(collider);
 
         if (collider != null)
             OnAttack(collider.GetComponent<Ship>());
@@ -39,11 +41,8 @@ public class ShipDelegator : MonoBehaviour
     {
         if (target != null)
         {
-            if (manager.Contains(target))
-                OnMove(target.transform.position);
-            else
-                foreach (Ship ship in selected)
-                    ship.Attack(target, true);
+            foreach (Ship ship in selected)
+                ship.Attack(target, true);
         }
     }
 

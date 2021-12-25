@@ -83,7 +83,7 @@ public class Ship : MonoBehaviour
         combat = Combat(ship, chase);
         StartCoroutine(combat);
 
-        Debug.Log("gonna mess up this dude " + ship);
+        Debug.Log("attacking " + ship);
     }
 
     public void Stop()
