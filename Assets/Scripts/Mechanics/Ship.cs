@@ -231,6 +231,11 @@ public class Ship : MonoBehaviour
         death.AddListener(action);
     }
 
+    public void RemoveDeathListener(UnityAction<Ship> action)
+    {
+        death.RemoveListener(action);
+    }
+
     public ShipManager GetManager()
     {
         return manager;

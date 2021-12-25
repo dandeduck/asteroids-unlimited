@@ -40,6 +40,8 @@ public class ShipDelegator : MonoBehaviour
         if (target != null)
             foreach (Ship ship in selected)
                 ship.Attack(target, true);
+        else
+            OnMove(VectorUtil.MousePosToGround(cam));
     }
 
     private void OnMove(Vector3 position)

@@ -1,27 +1,62 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class Captureable : MonoBehaviour
 {
-    [SerializeField] private float earn;
     [SerializeField] private float captureDuration;
 
     public float progress {get;}
 
+    private Dictionary<ShipManager, float> captureProgress;
     private List<Ship> capturingShips;
     private ShipManager capturer;
+    private ShipManager holder;
 
     private void Awake()
     {
+        captureProgress = new Dictionary<ShipManager, float>();
         capturingShips = new List<Ship>();
+    }
+
+    private void Start()
+    {
+        foreach (ShipManager manager in Object.FindObjectsOfType<ShipManager>())
+            captureProgress.Add(manager, 0);
     }
 
     private void Update()
     {
         if (capturer != null)
         {
-            
+            Debug.Log("capturing!");
+            foreach (ShipManager manager in captureProgress.Keys.ToList())
+            {
+                float progress = captureProgress[manager];
+                if (manager != capturer)
+                    captureProgress[manager] = Mathf.Max(0, progress - Time.deltaTime);
+                else
+                    captureProgress[manager] = Mathf.Min(captureDuration, progress + Time.deltaTime);
+            }
+
+            if (captureProgress[capturer] == captureDuration)
+            {
+                holder = capturer;
+                capturer = null;
+
+                Debug.Log("Now held by " + holder);
+            }
         }
+    }
+
+    public ShipManager GetHolder()
+    {
+        return holder;
+    }
+
+    public ShipManager GetCurrentCapturer()
+    {
+        return capturer;
     }
 
     private void OnTriggerEnter(Collider collider)
@@ -32,13 +67,32 @@ public class Captureable : MonoBehaviour
             OnShipEnter(ship);
     }
 
+    private void OnTriggerExit(Collider collider)
+    {
+        Ship ship = collider.GetComponent<Ship>();
+
+        if (ship != null)
+            OnShipExit(ship); 
+    }
+
     private void OnShipEnter(Ship ship)
     {
-        if (!IsBeingCaptured())
+        capturingShips.Add(ship);
+
+        if (capturingShips.Count == 1)
+            capturer = ship.GetManager();
+
+        ship.AddDeathListener(OnDestroyed);
+    }
+
+    private void OnShipExit(Ship ship)
+    {
+        capturingShips.Remove(ship);
+        
+        if (!(capturer == null && holder != null))
             CheckCapture();
 
-        capturingShips.Add(ship);
-        ship.AddDeathListener(OnDestroyed);
+        ship.RemoveDeathListener(OnDestroyed);
     }
 
     private bool IsBeingCaptured()
@@ -46,8 +100,20 @@ public class Captureable : MonoBehaviour
         return capturer != null;
     }
 
+    private void OnDestroyed(Ship ship)
+    {
+        capturingShips.Remove(ship);
+        CheckCapture();
+    }
+
     private void CheckCapture()
     {
+        if (capturingShips.Count == 0)
+        {
+            capturer = null;
+            return;
+        }
+        
         LayerMask firstShipLayer = capturingShips[0].gameObject.layer;
 
         foreach (Ship ship in capturingShips)
@@ -60,11 +126,5 @@ public class Captureable : MonoBehaviour
         }
 
         capturer = capturingShips[0].GetManager();
-    }
-
-    private void OnDestroyed(Ship ship)
-    {
-        capturingShips.Remove(ship);
-        CheckCapture();
     }
 }
