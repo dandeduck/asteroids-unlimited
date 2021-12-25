@@ -3,10 +3,10 @@ using UnityEngine;
 
 public static class ShipsUtil
 {
-    public static void SortShipsByDistance(List<Ship> units, Vector3 relativePoint)
+    public static void SortShipsByDistance(List<Ship> ships, Vector3 relativePoint)
     {
-        units.Sort((first, second) => 
-            (first.Object().transform.position - relativePoint).magnitude.CompareTo(
-                (second.Object().transform.position - relativePoint).magnitude));
+        ships.Sort((first, second) => 
+            (first.transform.position - relativePoint).magnitude.CompareTo(
+                (second.transform.position - relativePoint).magnitude));
     }
 }

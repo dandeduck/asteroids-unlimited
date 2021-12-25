@@ -3,8 +3,10 @@ using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Events;
 
-public class Ship : MonoBehaviour, Ship
+public class Ship : MonoBehaviour
 {
+    private const float MIN_TURN_ANGLE = 5f;
+
     [SerializeField] private ShipManager manager;
     [SerializeField] private float health;
     [SerializeField] private float damage;
@@ -18,7 +20,7 @@ public class Ship : MonoBehaviour, Ship
     private bool inCombat;
     private bool inChase;
     private Ship target;
-    private UnityEvent death;
+    private UnityEvent<Ship> death;
 
     private void Awake()
     {
@@ -28,6 +30,8 @@ public class Ship : MonoBehaviour, Ship
 
         inCombat = false;
         inChase = false;
+
+        death = new UnityEvent<Ship>();
     }
 
     private void Update()
@@ -38,7 +42,7 @@ public class Ship : MonoBehaviour, Ship
 
     private void LookAtTarget()
     {
-        Vector3 targetAdjusted = new Vector3(target.Object().transform.position.x, transform.position.y, target.Object().transform.position.z) - transform.position;
+        Vector3 targetAdjusted = new Vector3(target.transform.position.x, transform.position.y, target.transform.position.z) - transform.position;
         Quaternion wantedRotation = Quaternion.LookRotation(targetAdjusted, Vector3.up);
 
         transform.rotation = Quaternion.Slerp(transform.rotation, wantedRotation, Time.deltaTime * combatTurnSpeed);
@@ -54,9 +58,9 @@ public class Ship : MonoBehaviour, Ship
         GetComponentInChildren<Renderer>().material.color = Color.red;
     }
 
-    public void Move(Ship unit)
+    public void Move(Ship ship)
     {
-        Move(unit.Object().transform.position);
+        Move(ship.transform.position);
     }
 
     public void Move(Vector3 position)
@@ -72,18 +76,12 @@ public class Ship : MonoBehaviour, Ship
         agent.SetDestination(position);
     }
 
-    public void Attack(Ship unit, bool chase)
+    public void Attack(Ship ship, bool chase)
     {   
         Stop();
 
-        combat = Combat(unit, chase);
+        combat = Combat(ship, chase);
         StartCoroutine(combat);
-    }
-
-    public void StopCombat()
-    {
-        if (combat != null)
-            StopCoroutine(combat);
     }
 
     public void Stop()
@@ -91,13 +89,17 @@ public class Ship : MonoBehaviour, Ship
         StopCombat();
 
         agent.isStopped = true;
-        inCombat = false;
-        inChase = false;
     }
 
-    public void OnKill()
+    public void StopCombat()
     {
-        death.Invoke();
+        if (combat != null)
+        {
+            StopCoroutine(combat);
+            inCombat = false;
+            inChase = false;
+            target = null;
+        }
     }
 
     public void TakeDamage(float damage)
@@ -105,26 +107,19 @@ public class Ship : MonoBehaviour, Ship
         health -= damage;
 
         if (health <= 0)
-        {
-            OnKill();
-            manager.KillShip(this);
-        }
+            OnDeath();
     }
 
-    public GameObject Object()
+    
+    private void OnDeath()
     {
-        return gameObject;
+        death.Invoke(this);
+        death.RemoveAllListeners();
     }
 
     public bool IsAlive()
     {
         return health > 0;
-    }
-    
-    //This code is temporary. It is to be used until proper enemy system is implemented
-    public ShipManager Manager()
-    {
-        return manager;
     }
 
     public float GetDamagePerSecond()
@@ -137,20 +132,23 @@ public class Ship : MonoBehaviour, Ship
         return inCombat;
     }
 
-    private void OnAttack(Ship unit)
+    private void OnAttack(Ship ship)
     {
+        // Debug.Log("attacking " + ship);
     }
 
-    private IEnumerator Combat(Ship unit, bool shouldChase)
-    {
-        while (unit != null && unit.IsAlive())
+    private IEnumerator Combat(Ship ship, bool shouldChase)
+    {        
+        inCombat = true;
+
+        while (ship != null && ship.IsAlive())
         {
-            if (attackZone.IsOutside(unit))
+            if (attackZone.IsOutside(ship))
             {
                 if (shouldChase)
                 {
                     inChase = true;
-                    yield return Chase(unit);
+                    yield return Chase(ship);
                 }
                 else
                 {
@@ -162,17 +160,17 @@ public class Ship : MonoBehaviour, Ship
             {
                 inChase = false;
 
-                if (!inCombat)
+                if (target == null)
                 {
                     inCombat = true;
-                    yield return RotateTowards(unit);
-                    target = unit;
+                    yield return RotateTowards(ship);
+                    target = ship;
                 }
 
-                if (unit != null && unit.IsAlive())
+                if (ship != null && ship.IsAlive())
                 {
-                    OnAttack(unit);
-                    unit.TakeDamage(damage);
+                    OnAttack(ship);
+                    ship.TakeDamage(damage);
                 }
             }
 
@@ -186,19 +184,20 @@ public class Ship : MonoBehaviour, Ship
         }
 
         inCombat = false;
+        target = null;
         yield break;
     }
 
-    private IEnumerator Chase(Ship unit)
+    private IEnumerator Chase(Ship ship)
     {
-        Move(unit);
+        Move(ship);
 
-        while (unit != null && unit.IsAlive() && attackZone.IsOutside(unit))
+        while (ship != null && ship.IsAlive() && attackZone.IsOutside(ship))
         {
-            Vector3 unitPos = unit.Object().transform.position;
+            Vector3 shipPos = ship.transform.position;
 
-            if ((agent.destination - unitPos).magnitude > attackZone.GetRadius())
-                Move(unitPos);
+            if ((agent.destination - shipPos).magnitude > attackZone.GetRadius())
+                Move(shipPos);
 
             yield return null;
         }
@@ -206,12 +205,12 @@ public class Ship : MonoBehaviour, Ship
         agent.isStopped = true;
     }
 
-    private IEnumerator RotateTowards(Ship unit)
+    private IEnumerator RotateTowards(Ship ship)
     {
-        Vector3 targetAdjusted = new Vector3(unit.Object().transform.position.x, transform.position.y, unit.Object().transform.position.z) - transform.position;
+        Vector3 targetAdjusted = new Vector3(ship.transform.position.x, transform.position.y, ship.transform.position.z) - transform.position;
         Quaternion wantedRotation = Quaternion.LookRotation(targetAdjusted, Vector3.up);
 
-        while (unit != null && unit.IsAlive() && Mathf.Abs(wantedRotation.eulerAngles.y - transform.rotation.eulerAngles.y) > 3)
+        while (ship != null && ship.IsAlive() && Mathf.Abs(wantedRotation.eulerAngles.y - transform.rotation.eulerAngles.y) > MIN_TURN_ANGLE)
         {
             transform.rotation = Quaternion.Slerp(transform.rotation, wantedRotation, Time.deltaTime * combatTurnSpeed);
             yield return null;
@@ -223,8 +222,13 @@ public class Ship : MonoBehaviour, Ship
         return !agent.isStopped;
     }
 
-    public void AddDeathListener(UnityAction action)
+    public void AddDeathListener(UnityAction<Ship> action)
     {
         death.AddListener(action);
+    }
+
+    public ShipManager GetManager()
+    {
+        return manager;
     }
 }

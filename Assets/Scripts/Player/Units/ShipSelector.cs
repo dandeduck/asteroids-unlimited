@@ -4,25 +4,25 @@ using UnityEngine;
 
 public class ShipSelector : MonoBehaviour
 {
-    private const int DRAG_SELECT_THRESHOLD = 40;
+    private const int DRAG_SELECT_THRESHOLD = 3;
 
     [SerializeField] private RectTransform selectionBox;
 
     private Dictionary<int, Ship> selectedShips;
-    private LayerMask unitLayer;
+    private LayerMask shipLayer;
     private bool dragSelect;
     private Vector2 dragStart;
 
-    private ShipManager unitManager;
+    private ShipManager shipManager;
     private Camera cam;
 
     private void Awake()
     {
         cam = GetComponentInChildren<Camera>();
-        unitManager = GetComponent<ShipManager>();
+        shipManager = GetComponent<ShipManager>();
 
         selectedShips = new Dictionary<int, Ship>();
-        unitLayer = LayerMask.GetMask("Ships");
+        shipLayer = shipManager.GetLayer();
     }
 
     private void Update()
@@ -34,7 +34,7 @@ public class ShipSelector : MonoBehaviour
         {
             UpdateSelectionBox();
 
-            if (selectionBox.sizeDelta.magnitude > DRAG_SELECT_THRESHOLD) //mouse is not really held
+            if (selectionBox.sizeDelta.magnitude > DRAG_SELECT_THRESHOLD)
                 dragSelect = true;
         }
 
@@ -73,12 +73,12 @@ public class ShipSelector : MonoBehaviour
 
     private void SelectShipsBasedOnScreenPosition(Vector2 min, Vector2 max)
     {
-        foreach (Ship unit in unitManager.GetShips())
+        foreach (Ship ship in shipManager.GetShips())
         {
-            Vector2 screen = cam.WorldToScreenPoint(unit.Object().transform.position);
+            Vector2 screen = cam.WorldToScreenPoint(ship.transform.position);
 
             if (VectorUtil.IsInsideRect(screen, min, max))
-                SelectShip(unit);
+                SelectShip(ship);
         }
     }
 
@@ -94,7 +94,7 @@ public class ShipSelector : MonoBehaviour
 
     private Ship MouseSelectedShip()
     {
-        Collider collider = VectorUtil.MousePosRaycast(cam, unitLayer);
+        Collider collider = VectorUtil.MousePosRaycast(cam, shipLayer);
 
         if (collider != null)
             return collider.GetComponent<Ship>();
@@ -102,10 +102,10 @@ public class ShipSelector : MonoBehaviour
         return null;
     }
 
-    private void OnShipSelected(Ship unit)
+    private void OnShipSelected(Ship ship)
     {
-        if (unitManager.Contains(unit))
-            SelectShip(unit);
+        if (shipManager.Contains(ship))
+            SelectShip(ship);
     }
 
     private bool ChainSelect()
@@ -113,32 +113,32 @@ public class ShipSelector : MonoBehaviour
         return Input.GetKey(KeyCode.LeftControl);
     }
 
-    private void SelectShips(List<Ship> units)
+    private void SelectShips(List<Ship> ships)
     {
-        foreach (Ship unit in units)
+        foreach (Ship ship in ships)
         {
-            if (!selectedShips.ContainsKey(unit.Id()))
+            if (!selectedShips.ContainsKey(ship.GetInstanceID()))
             {
-                selectedShips.Add(unit.Id(), unit);
-                unit.OnSelect();
+                selectedShips.Add(ship.GetInstanceID(), ship);
+                ship.OnSelect();
             }
         }
     }
 
-    private void ReplaceSelection(List<Ship> units)
+    private void ReplaceSelection(List<Ship> ships)
     {
         DeselectAll();
 
-        foreach (Ship unit in units)
-            SelectShip(unit);
+        foreach (Ship ship in ships)
+            SelectShip(ship);
     }
 
-    private void SelectShip(Ship unit)
+    private void SelectShip(Ship ship)
     {
-        if (!selectedShips.ContainsKey(unit.Id()))
+        if (!selectedShips.ContainsKey(ship.GetInstanceID()))
         {
-            selectedShips.Add(unit.Id(), unit);
-            unit.OnSelect();
+            selectedShips.Add(ship.GetInstanceID(), ship);
+            ship.OnSelect();
         }
     }
 
@@ -149,24 +149,24 @@ public class ShipSelector : MonoBehaviour
 
     public void DeselectAll()
     {
-        foreach (Ship unit in selectedShips.Values)
-            unit.OnDeselect();
+        foreach (Ship ship in selectedShips.Values)
+            ship.OnDeselect();
 
         selectedShips.Clear();
     }
 
-    public void DeselectShips(List<Ship> units)
+    public void DeselectShips(List<Ship> ships)
     {
-        foreach (Ship unit in units)
-            DeselectShip(unit);   
+        foreach (Ship ship in ships)
+            DeselectShip(ship);   
     }
 
-    public void DeselectShip(Ship unit)
+    public void DeselectShip(Ship ship)
     {
-        if (selectedShips.ContainsKey(unit.Id()))
+        if (selectedShips.ContainsKey(ship.GetInstanceID()))
         {
-            selectedShips.Remove(unit.Id());
-            unit.OnDeselect();
+            selectedShips.Remove(ship.GetInstanceID());
+            ship.OnDeselect();
         }
     }
 }
