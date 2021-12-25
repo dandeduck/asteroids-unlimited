@@ -93,6 +93,7 @@ public class Ship : MonoBehaviour
     {
         StopCombat();
 
+        isMoving = false;
         agent.isStopped = true;
     }
 
