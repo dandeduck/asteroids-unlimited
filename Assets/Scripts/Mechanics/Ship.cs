@@ -16,9 +16,10 @@ public class Ship : MonoBehaviour
     private NavMeshAgent agent;
     private AttackZone attackZone;
     private float radius;
-    private IEnumerator combat;
+    private Coroutine combat;
     private bool inCombat;
     private bool inChase;
+    private bool isMoving;
     private Ship target;
     private UnityEvent<Ship> death;
 
@@ -38,6 +39,8 @@ public class Ship : MonoBehaviour
     {
         if (target != null && target.IsAlive() && inCombat && !inChase)
             LookAtTarget();
+        if (isMoving && agent.pathStatus == NavMeshPathStatus.PathComplete)
+            isMoving = false;
     }
 
     private void LookAtTarget()
@@ -70,6 +73,7 @@ public class Ship : MonoBehaviour
 
     public void Move(Vector3 position, int arrivalIndex, int arrivalAmount)
     {
+        isMoving = true;
         agent.stoppingDistance = radius * Mathf.Sqrt(arrivalAmount * 2) + Mathf.CeilToInt(arrivalIndex/2) * radius;
         agent.isStopped = false;
 
@@ -77,13 +81,13 @@ public class Ship : MonoBehaviour
     }
 
     public void Attack(Ship ship, bool chase)
-    {   
-        Stop();
+    {
+        if (!isMoving)
+        {
+            Stop();
 
-        combat = Combat(ship, chase);
-        StartCoroutine(combat);
-
-        Debug.Log("attacking " + ship);
+            combat = StartCoroutine(Combat(ship, chase));
+        }
     }
 
     public void Stop()
@@ -136,7 +140,6 @@ public class Ship : MonoBehaviour
 
     private void OnAttack(Ship ship)
     {
-        Debug.Log("attacking " + ship);
     }
 
     private IEnumerator Combat(Ship ship, bool shouldChase)

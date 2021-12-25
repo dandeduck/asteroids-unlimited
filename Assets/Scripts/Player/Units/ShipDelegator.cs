@@ -15,7 +15,7 @@ public class ShipDelegator : MonoBehaviour
         selector = GetComponent<ShipSelector>();
         manager = GetComponent<ShipManager>();
         cam = GetComponentInChildren<Camera>();
-        enemyShipMask = ~(manager.GetLayer() | LayerMask.GetMask("NonUnits"));
+        enemyShipMask = ~manager.GetLayer();
     }
 
     private void LateUpdate()
@@ -28,7 +28,6 @@ public class ShipDelegator : MonoBehaviour
     {
         selected = selector.GetSelectedShips();
         Collider collider = VectorUtil.MousePosRaycast(cam, enemyShipMask);
-
         Debug.Log(collider);
 
         if (collider != null)

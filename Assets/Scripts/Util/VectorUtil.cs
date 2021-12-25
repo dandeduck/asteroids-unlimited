@@ -40,7 +40,7 @@ public static class VectorUtil
         Ray cameraRay = camera.ScreenPointToRay(screen);
         RaycastHit hit = new RaycastHit();
 
-        Physics.Raycast(cameraRay, out hit, camera.farClipPlane, layer);
+        Physics.Raycast(cameraRay, out hit, camera.farClipPlane, layer, QueryTriggerInteraction.Ignore);
 
         return hit.collider;
     }
