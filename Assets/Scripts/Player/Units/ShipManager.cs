@@ -5,11 +5,13 @@ using UnityEngine;
 public class ShipManager : MonoBehaviour
 {
     private ShipSelector selector;
+    private FinanceManager finance;
     private Dictionary<int, Ship> ships;
 
     private void Awake()
     {
         selector = GetComponent<ShipSelector>();
+        finance = GetComponent<FinanceManager>();
         ships = new Dictionary<int, Ship>();
     }
 
@@ -19,6 +21,11 @@ public class ShipManager : MonoBehaviour
         foreach (Ship ship in Object.FindObjectsOfType<Ship>())
             if (ship.GetManager().GetInstanceID() == GetInstanceID())
                 OnNewShip(ship);
+    }
+
+    public FinanceManager GetFinanceManager()
+    {
+        return finance;
     }
 
     public List<Ship> GetShips()
