@@ -97,7 +97,11 @@ public class Ship : MonoBehaviour
     public void Stop()
     {
         StopCombat();
+        StopMovement();
+    }
 
+    public void StopMovement()
+    {
         isMoving = false;
         agent.isStopped = true;
     }
@@ -212,7 +216,7 @@ public class Ship : MonoBehaviour
             yield return null;
         }
 
-        agent.isStopped = true;
+        StopMovement();
     }
 
     private IEnumerator RotateTowards(Ship ship)

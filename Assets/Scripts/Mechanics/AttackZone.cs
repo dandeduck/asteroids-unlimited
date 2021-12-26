@@ -7,12 +7,14 @@ public class AttackZone : MonoBehaviour
     private Dictionary<int, Ship> attackableShips;
     private float radius;
     private Ship ship;
+    private LayerMask nonUnits;
 
     private void Awake()
     {
         attackableShips = new Dictionary<int, Ship>();
         radius = GetComponent<SphereCollider>().radius;
         ship = GetComponentInParent<Ship>();
+        nonUnits = LayerMask.GetMask("NonUnits");
     }
 
     private void Update()
@@ -60,7 +62,20 @@ public class AttackZone : MonoBehaviour
 
     public bool IsOutside(Ship ship)
     {
-        return !attackableShips.ContainsKey(ship.GetInstanceID());
+        return IsOutside(ship, 0);
+    }
+
+    public bool IsOutside(Ship ship, float additionalSpace)
+    {
+        if (attackableShips.ContainsKey(ship.GetInstanceID()))
+            return false;
+
+        Vector3 distance = ship.transform.position - transform.position;
+
+        if (distance.magnitude > radius)
+            return true;
+
+        return Physics.Raycast(transform.position, distance, radius, nonUnits, QueryTriggerInteraction.Ignore);
     }
 
     public float GetRadius()
