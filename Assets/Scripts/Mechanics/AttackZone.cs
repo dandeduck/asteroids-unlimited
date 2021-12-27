@@ -72,10 +72,10 @@ public class AttackZone : MonoBehaviour
 
         Vector3 distance = ship.transform.position - transform.position;
 
-        if (distance.magnitude > radius)
+        if (distance.magnitude > radius + additionalSpace)
             return true;
 
-        return Physics.Raycast(transform.position, distance, radius, nonUnits, QueryTriggerInteraction.Ignore);
+        return Physics.Raycast(transform.position, distance, radius + additionalSpace, nonUnits, QueryTriggerInteraction.Ignore);
     }
 
     public float GetRadius()
