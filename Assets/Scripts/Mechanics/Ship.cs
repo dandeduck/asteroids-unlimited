@@ -21,12 +21,14 @@ public class Ship : MonoBehaviour
     private bool isMoving;
     private Ship target;
     private UnityEvent<Ship> death;
+    private float acceleration;
 
     private void Awake()
     {
         agent = GetComponent<NavMeshAgent>();
         attackZone = GetComponentInChildren<AttackZone>();
         radius = agent.radius;
+        acceleration = agent.acceleration;
 
         inCombat = false;
         inChase = false;
@@ -77,6 +79,7 @@ public class Ship : MonoBehaviour
 
     public void Move(Vector3 position, int arrivalIndex, int arrivalAmount)
     {
+        agent.acceleration = acceleration;
         isMoving = true;
         agent.stoppingDistance = radius * Mathf.Sqrt(arrivalAmount * 2) + Mathf.CeilToInt(arrivalIndex/2) * radius;
         agent.isStopped = false;
@@ -96,7 +99,12 @@ public class Ship : MonoBehaviour
     public void Stop()
     {
         StopCombat();
+        StopMovement();
+    }
 
+    public void StopMovement()
+    {
+        agent.acceleration *= 3;
         isMoving = false;
         agent.isStopped = true;
     }
@@ -203,7 +211,7 @@ public class Ship : MonoBehaviour
             yield return null;
         }
 
-        agent.isStopped = true;
+        StopMovement();
     }
 
     private IEnumerator RotateTowards(Ship ship)
