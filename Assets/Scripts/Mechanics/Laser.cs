@@ -7,7 +7,9 @@ public class Laser : MonoBehaviour
 
     [SerializeField] private float speed;
     [SerializeField] private float extendedScale;
+    [SerializeField] private float damage;
 
+    private MeshRenderer meshRenderer;
     private Vector3 regularScale;
     private Vector3 startingPosition;
     private float spaceToLocalZScale;
@@ -16,6 +18,7 @@ public class Laser : MonoBehaviour
 
     private void Awake()
     {
+        meshRenderer = GetComponentInChildren<MeshRenderer>();
         spaceToLocalZScale = GetComponentInChildren<Renderer>().bounds.size.z;
 
         startingPosition = transform.localPosition;
@@ -26,6 +29,8 @@ public class Laser : MonoBehaviour
 
     public void Shoot(Ship target)
     {
+        meshRenderer.enabled = true;
+        
         if (shootingCoroutine != null)
             StopCoroutine(shootingCoroutine);
         
@@ -38,7 +43,8 @@ public class Laser : MonoBehaviour
 
         while(!HitShip(target, sourcePosition) || !ShouldDisappear())
         {
-            transform.localPosition += (target.transform.position - transform.position) * speed * Time.deltaTime;
+            transform.rotation = Quaternion.LookRotation(target.transform.position - transform.position);
+            transform.position += transform.forward * speed * Time.deltaTime;
             transform.localScale = new Vector3(transform.localScale.x, transform.localScale.y, Mathf.Min(extendedScale, transform.localScale.z + speed * spaceToLocalZScale / 2));
 
             yield return null;
@@ -46,6 +52,8 @@ public class Laser : MonoBehaviour
 
         transform.localPosition = startingPosition;
         transform.localScale = regularScale;
+        target.TakeDamage(damage);
+        meshRenderer.enabled = false;
     }
 
     private bool HitShip(Ship target, Vector3 sourcePosition)
@@ -53,7 +61,7 @@ public class Laser : MonoBehaviour
         return (target.transform.position - sourcePosition).magnitude <= (transform.position - sourcePosition).magnitude;
     }
 
-    // private bool HitShip(Vector3 prevPosition, Ship target)
+    // private bool HitShip(Vector3 prevPosition, Ship target) actual hit detection
     // {
     //     if (prevPosition == Vector3.zero)
     //         return false;
@@ -64,8 +72,10 @@ public class Laser : MonoBehaviour
 
     //     foreach (RaycastHit hit in hits)
     //     {
-    //         if ()
+    //         if (hit.GetComponent<Ship>() == target)
+    //              return true;
     //     }
+        // return false;
     // }
 
     private bool ShouldDisappear()

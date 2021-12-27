@@ -9,7 +9,6 @@ public class Ship : MonoBehaviour
 
     [SerializeField] private ShipManager manager;
     [SerializeField] private float health;
-    [SerializeField] private float damage;
     [SerializeField] private float fireRateSeconds;
     [SerializeField] private float combatTurnSpeed;
 
@@ -39,11 +38,11 @@ public class Ship : MonoBehaviour
     {
         if (target != null && target.IsAlive() && inCombat && !inChase)
             LookAtTarget();
-        if (inCombat || HasReachedDestinastion() && isMoving)
+        if (inCombat || HasReachedDestination() && isMoving)
             isMoving = false;
     }
 
-    private bool HasReachedDestinastion()
+    private bool HasReachedDestination()
     {
         return agent.pathStatus == NavMeshPathStatus.PathComplete && agent.remainingDistance <= agent.stoppingDistance;
     }
@@ -133,11 +132,6 @@ public class Ship : MonoBehaviour
         return health > 0;
     }
 
-    public float GetDamagePerSecond()
-    {
-        return damage / fireRateSeconds;
-    }
-
     public bool IsInCombat()
     {
         return inCombat;
@@ -145,6 +139,7 @@ public class Ship : MonoBehaviour
 
     private void OnAttack(Ship ship)
     {
+        GetComponentInChildren<Laser>().Shoot(ship);
     }
 
     private IEnumerator Combat(Ship ship, bool shouldChase)
@@ -177,11 +172,7 @@ public class Ship : MonoBehaviour
                     target = ship;
                 }
 
-                if (ship != null && ship.IsAlive())
-                {
-                    OnAttack(ship);
-                    ship.TakeDamage(damage);
-                }
+                OnAttack(ship);
             }
 
             if (inChase)
