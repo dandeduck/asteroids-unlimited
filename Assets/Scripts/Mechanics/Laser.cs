@@ -12,14 +12,14 @@ public class Laser : MonoBehaviour
     private MeshRenderer meshRenderer;
     private Vector3 regularScale;
     private Vector3 startingPosition;
-    private float spaceToLocalZScale;
+    private float length;
     private Coroutine shootingCoroutine;
     private int notAllyMask;
 
     private void Awake()
     {
         meshRenderer = GetComponentInChildren<MeshRenderer>();
-        spaceToLocalZScale = GetComponentInChildren<Renderer>().bounds.size.z;
+        length = meshRenderer.bounds.size.z;
 
         startingPosition = transform.localPosition;
         regularScale = transform.localScale;
@@ -29,11 +29,13 @@ public class Laser : MonoBehaviour
 
     public void Shoot(Ship target)
     {
+        Reset();
         meshRenderer.enabled = true;
         
         if (shootingCoroutine != null)
             StopCoroutine(shootingCoroutine);
-        
+
+        target.AddDeathListener(ship => {StopCoroutine(shootingCoroutine); Reset();});
         shootingCoroutine = StartCoroutine(ShootEnumerator(target));
     }
 
@@ -41,45 +43,37 @@ public class Laser : MonoBehaviour
     {
         Vector3 sourcePosition = transform.position;
 
-        while(!HitShip(target, sourcePosition) || !ShouldDisappear())
+        while(!HitShip(target, sourcePosition) && !ShouldDisappear())
         {
             transform.rotation = Quaternion.LookRotation(target.transform.position - transform.position);
             transform.position += transform.forward * speed * Time.deltaTime;
-            transform.localScale = new Vector3(transform.localScale.x, transform.localScale.y, Mathf.Min(extendedScale, transform.localScale.z + speed * spaceToLocalZScale / 2));
+            transform.localScale = new Vector3(transform.localScale.x, transform.localScale.y, Mathf.Min(extendedScale, transform.localScale.z + speed * length / 2));
 
             yield return null;
         }
 
+        Reset();
+
+        if (target != null)
+            target.TakeDamage(damage);
+    }
+
+    private void Reset()
+    {
         transform.localPosition = startingPosition;
         transform.localScale = regularScale;
-        target.TakeDamage(damage);
         meshRenderer.enabled = false;
     }
 
     private bool HitShip(Ship target, Vector3 sourcePosition)
     {
-        return (target.transform.position - sourcePosition).magnitude <= (transform.position - sourcePosition).magnitude;
+        if (target != null)
+            return ((transform.position - sourcePosition).magnitude + meshRenderer.bounds.size.z) >= (target.transform.position - sourcePosition).magnitude;
+        return true;
     }
-
-    // private bool HitShip(Vector3 prevPosition, Ship target) actual hit detection
-    // {
-    //     if (prevPosition == Vector3.zero)
-    //         return false;
-        
-    //     Vector3 diff = transform.position - prevPosition;
-
-    //     RaycastHit[] hits = Physics.RaycastAll(transform.position, diff, diff.magnitude, notAllyMask, QueryTriggerInteraction.Ignore);
-
-    //     foreach (RaycastHit hit in hits)
-    //     {
-    //         if (hit.GetComponent<Ship>() == target)
-    //              return true;
-    //     }
-        // return false;
-    // }
 
     private bool ShouldDisappear()
     {
-        return (transform.localPosition - startingPosition).magnitude < DISAPPEARANCE_RANGE;
+        return (transform.localPosition - startingPosition).magnitude >= DISAPPEARANCE_RANGE;
     }
 }
