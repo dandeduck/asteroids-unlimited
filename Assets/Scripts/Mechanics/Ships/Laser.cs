@@ -6,11 +6,9 @@ public class Laser : MonoBehaviour
     private const int DISAPPEARANCE_RANGE = 50;
 
     [SerializeField] private float speed;
-    [SerializeField] private float extendedScale;
     [SerializeField] private float damage;
 
     private MeshRenderer meshRenderer;
-    private Vector3 regularScale;
     private Vector3 startingPosition;
     private float length;
     private Coroutine shootingCoroutine;
@@ -22,7 +20,6 @@ public class Laser : MonoBehaviour
         length = meshRenderer.bounds.size.z;
 
         startingPosition = transform.localPosition;
-        regularScale = transform.localScale;
 
         notAllyMask = ~(1 << gameObject.layer);
     }
@@ -43,13 +40,12 @@ public class Laser : MonoBehaviour
     {
         Vector3 sourcePosition = transform.position;
 
-        while(!HitShip(target, sourcePosition) && !ShouldDisappear())
+        while(!HitShip(target.transform.position - transform.forward * speed * Time.fixedDeltaTime, sourcePosition) && !ShouldDisappear())
         {
             transform.rotation = Quaternion.LookRotation(target.transform.position - transform.position);
-            transform.position += transform.forward * speed * Time.deltaTime;
-            transform.localScale = new Vector3(transform.localScale.x, transform.localScale.y, Mathf.Min(extendedScale, transform.localScale.z + speed * length / 2));
+            transform.position += transform.forward * speed * Time.fixedDeltaTime;
 
-            yield return null;
+            yield return new WaitForFixedUpdate();
         }
 
         Reset();
@@ -61,14 +57,13 @@ public class Laser : MonoBehaviour
     private void Reset()
     {
         transform.localPosition = startingPosition;
-        transform.localScale = regularScale;
         meshRenderer.enabled = false;
     }
 
-    private bool HitShip(Ship target, Vector3 sourcePosition)
+    private bool HitShip(Vector3 target, Vector3 sourcePosition)
     {
         if (target != null)
-            return ((transform.position - sourcePosition).magnitude + meshRenderer.bounds.size.z) >= (target.transform.position - sourcePosition).magnitude;
+            return ((transform.position - sourcePosition).magnitude + meshRenderer.bounds.size.z) >= (target - sourcePosition).magnitude;
         return true;
     }
 
