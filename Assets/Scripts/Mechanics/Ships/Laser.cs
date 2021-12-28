@@ -3,8 +3,6 @@ using UnityEngine;
 
 public class Laser : MonoBehaviour
 {
-    private const int DISAPPEARANCE_RANGE = 50;
-
     [SerializeField] private float speed;
     [SerializeField] private float damage;
 
@@ -12,7 +10,7 @@ public class Laser : MonoBehaviour
     private Vector3 startingPosition;
     private float length;
     private Coroutine shootingCoroutine;
-    private int notAllyMask;
+    private bool isShooting;
 
     private void Awake()
     {
@@ -20,8 +18,11 @@ public class Laser : MonoBehaviour
         length = meshRenderer.bounds.size.z;
 
         startingPosition = transform.localPosition;
+    }
 
-        notAllyMask = ~(1 << gameObject.layer);
+    public bool IsShooting()
+    {
+        return isShooting;
     }
 
     public void Shoot(Ship target)
@@ -38,9 +39,12 @@ public class Laser : MonoBehaviour
 
     private IEnumerator ShootEnumerator(Ship target)
     {
-        Vector3 sourcePosition = transform.position;
+        isShooting = true;
 
-        while(!HitShip(target.transform.position - transform.forward * speed * Time.fixedDeltaTime, sourcePosition) && !ShouldDisappear())
+        Vector3 sourcePosition = transform.position;
+        float maxDistance = (target.transform.position - sourcePosition).magnitude;
+
+        while(!HitShip(target.transform.position - transform.forward * speed * Time.fixedDeltaTime, sourcePosition) && !ShouldDisappear(maxDistance))
         {
             transform.rotation = Quaternion.LookRotation(target.transform.position - transform.position);
             transform.position += transform.forward * speed * Time.fixedDeltaTime;
@@ -58,17 +62,18 @@ public class Laser : MonoBehaviour
     {
         transform.localPosition = startingPosition;
         meshRenderer.enabled = false;
+        isShooting = false;
     }
 
     private bool HitShip(Vector3 target, Vector3 sourcePosition)
     {
         if (target != null)
-            return ((transform.position - sourcePosition).magnitude + meshRenderer.bounds.size.z) >= (target - sourcePosition).magnitude;
+            return ((transform.position - sourcePosition).magnitude + length / 2) >= (target - sourcePosition).magnitude;
         return true;
     }
 
-    private bool ShouldDisappear()
+    private bool ShouldDisappear(float maxDistance)
     {
-        return (transform.localPosition - startingPosition).magnitude >= DISAPPEARANCE_RANGE;
+        return (transform.localPosition - startingPosition).magnitude >= maxDistance;
     }
 }
