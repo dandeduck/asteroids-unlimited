@@ -17,7 +17,12 @@ public class Laser : MonoBehaviour
         meshRenderer = GetComponentInChildren<MeshRenderer>();
         length = meshRenderer.bounds.size.z;
 
-        startingPosition = transform.localPosition;
+        Reset();
+    }
+
+    public float GetSpeed()
+    {
+        return speed;
     }
 
     public bool IsShooting()
@@ -44,7 +49,7 @@ public class Laser : MonoBehaviour
         Vector3 sourcePosition = transform.position;
         float maxDistance = (target.transform.position - sourcePosition).magnitude;
 
-        while(!HitShip(target.transform.position - transform.forward * speed * Time.fixedDeltaTime, sourcePosition) && !ShouldDisappear(maxDistance))
+        while(target != null && !HitShip(target.transform.position - transform.forward * speed * Time.fixedDeltaTime, sourcePosition) && !ShouldDisappear(maxDistance))
         {
             transform.rotation = Quaternion.LookRotation(target.transform.position - transform.position);
             transform.position += transform.forward * speed * Time.fixedDeltaTime;

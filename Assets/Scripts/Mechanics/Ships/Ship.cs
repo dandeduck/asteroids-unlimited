@@ -9,18 +9,18 @@ public class Ship : MonoBehaviour
 
     [SerializeField] private ShipManager manager;
     [SerializeField] private float health;
-    [SerializeField] private float fireRateSeconds;
     [SerializeField] private float combatTurnSpeed;
 
     private NavMeshAgent agent;
     private AttackZone attackZone;
     private float radius;
     private Coroutine combat;
+    private UnityEvent<Ship> death;
+
     private bool inCombat;
     private bool inChase;
     private bool isMoving;
     private Ship target;
-    private UnityEvent<Ship> death;
     private float acceleration;
 
     private void Awake()
@@ -59,12 +59,10 @@ public class Ship : MonoBehaviour
 
     public void OnDeselect()
     {
-        GetComponentInChildren<Renderer>().material.color = Color.black;
     }
 
     public void OnSelect()
     {
-        GetComponentInChildren<Renderer>().material.color = Color.red;
     }
 
     public void Move(Ship ship)
@@ -104,9 +102,12 @@ public class Ship : MonoBehaviour
 
     public void StopMovement()
     {
-        agent.acceleration *= 3;
-        isMoving = false;
-        agent.isStopped = true;
+        if (IsAlive())
+        {
+            agent.acceleration *= 3;
+            isMoving = false;
+            agent.isStopped = true;
+        }
     }
 
     public void StopCombat()
@@ -145,9 +146,19 @@ public class Ship : MonoBehaviour
         return inCombat;
     }
 
-    private void OnAttack(Ship ship)
+    private void StartShooting(Ship ship)
     {
-        GetComponentInChildren<Laser>().Shoot(ship);
+        GetComponentInChildren<LaserCannon>().StartShooting(ship);
+    }
+
+    private void StopShooting()
+    {
+        GetComponentInChildren<LaserCannon>().StopShooting();
+    }
+
+    private bool IsShooting()
+    {
+        return GetComponentInChildren<LaserCannon>().IsShooting();
     }
 
     private IEnumerator Combat(Ship ship, bool shouldChase)
@@ -156,7 +167,17 @@ public class Ship : MonoBehaviour
 
         while (ship != null && ship.IsAlive())
         {
-            if (attackZone.IsOutside(ship))
+            if (!attackZone.IsOutside(ship))
+            {
+                if (!IsShooting())
+                {
+                    inCombat = true;
+                    yield return RotateTowards(ship);
+                    target = ship;
+                    StartShooting(ship);
+                }
+            }
+            else
             {
                 if (shouldChase)
                 {
@@ -169,36 +190,17 @@ public class Ship : MonoBehaviour
                     yield break;
                 }
             }
-            else
-            {
-                inChase = false;
 
-                if (target == null)
-                {
-                    inCombat = true;
-                    yield return RotateTowards(ship);
-                    target = ship;
-                }
-
-                OnAttack(ship);
-            }
-
-            if (inChase)
-            {
-                inChase = false;
-                yield return null;
-            }
-            else
-                yield return new WaitForSeconds(1/fireRateSeconds);
+            yield return null;
         }
 
         inCombat = false;
         target = null;
-        yield break;
     }
 
     private IEnumerator Chase(Ship ship)
     {
+        StopShooting();
         Move(ship);
 
         while (ship != null && ship.IsAlive() && attackZone.IsOutside(ship))

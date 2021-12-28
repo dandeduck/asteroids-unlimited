@@ -19,7 +19,7 @@ public class ShipManager : MonoBehaviour
     private void Start()
     {
         foreach (Ship ship in Object.FindObjectsOfType<Ship>())
-            if (ship.GetManager().GetInstanceID() == GetInstanceID())
+            if (ship.gameObject.layer == gameObject.layer)
                 OnNewShip(ship);
     }
 
