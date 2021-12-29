@@ -12,10 +12,10 @@ public class Ship : MonoBehaviour
     [SerializeField] private float combatTurnSpeed;
 
     private NavMeshAgent agent;
-    private AttackZone attackZone;
     private float radius;
     private Coroutine combat;
     private UnityEvent<Ship> death;
+    private WeaponSystem[] weapons;
 
     private bool inCombat;
     private bool inChase;
@@ -26,7 +26,7 @@ public class Ship : MonoBehaviour
     private void Awake()
     {
         agent = GetComponent<NavMeshAgent>();
-        attackZone = GetComponentInChildren<AttackZone>();
+        weapons = GetComponentsInChildren<WeaponSystem>();
         radius = agent.radius;
         acceleration = agent.acceleration;
 
@@ -146,28 +146,13 @@ public class Ship : MonoBehaviour
         return inCombat;
     }
 
-    private void StartShooting(Ship ship)
-    {
-        GetComponentInChildren<LaserCannon>().StartShooting(ship);
-    }
-
-    private void StopShooting()
-    {
-        GetComponentInChildren<LaserCannon>().StopShooting();
-    }
-
-    private bool IsShooting()
-    {
-        return GetComponentInChildren<LaserCannon>().IsShooting();
-    }
-
     private IEnumerator Combat(Ship ship, bool shouldChase)
     {        
         inCombat = true;
 
         while (ship != null && ship.IsAlive())
         {
-            if (!attackZone.IsOutside(ship))
+            if (!GetAttackZone().IsOutside(ship))
             {
                 if (!IsShooting())
                 {
@@ -203,11 +188,11 @@ public class Ship : MonoBehaviour
         StopShooting();
         Move(ship);
 
-        while (ship != null && ship.IsAlive() && attackZone.IsOutside(ship))
+        while (ship != null && ship.IsAlive() && GetAttackZone().IsOutside(ship))
         {
             Vector3 shipPos = ship.transform.position;
 
-            if ((agent.destination - shipPos).magnitude > attackZone.GetRadius())
+            if ((agent.destination - shipPos).magnitude > GetAttackZone().GetRadius())
                 Move(shipPos);
 
             yield return null;
@@ -226,6 +211,28 @@ public class Ship : MonoBehaviour
             transform.rotation = Quaternion.Slerp(transform.rotation, wantedRotation, Time.deltaTime * combatTurnSpeed);
             yield return null;
         }
+    }
+    
+    private void StartShooting(Ship ship)
+    {
+        for (int i = 0; i < weapons.Length; i++)
+            weapons[i].StartShooting(ship);
+    }
+
+    private void StopShooting()
+    {
+        for (int i = 0; i < weapons.Length; i++)
+            weapons[i].StopShooting();
+    }
+
+    private bool IsShooting()
+    {
+        return weapons[0].IsShooting();
+    }
+
+    private AttackZone GetAttackZone()
+    {
+        return weapons[0].GetAttackZone();
     }
 
     public bool IsMoving()

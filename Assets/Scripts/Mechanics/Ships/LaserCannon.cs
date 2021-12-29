@@ -57,7 +57,6 @@ public class LaserCannon : MonoBehaviour
     private void CreateLasers(float distance)
     {
         int laserAmount = Mathf.CeilToInt(distance / ammunition.GetSpeed() * rateOfFire);
-        Debug.Log(+ distance + " / " + ammunition.GetSpeed() + " * " + rateOfFire + " = " + laserAmount);
         lasers = new Laser[laserAmount];
 
         for (int i = 0; i < laserAmount; i++)
