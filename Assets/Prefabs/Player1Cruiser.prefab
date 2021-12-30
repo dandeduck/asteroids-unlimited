@@ -195,7 +195,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8f7e7bde960d24064b3d946cba173495, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rateOfFire: 3
+  rateOfFire: 5
   ammunition: {fileID: 6568902252918242097, guid: 61dd49b08ee5a44538a5336f69c22633,
     type: 3}
 --- !u!1 &5072542872296716270
@@ -300,7 +300,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8f7e7bde960d24064b3d946cba173495, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rateOfFire: 3
+  rateOfFire: 5
   ammunition: {fileID: 6568902252918242097, guid: 61dd49b08ee5a44538a5336f69c22633,
     type: 3}
 --- !u!1001 &6381433929770822463
