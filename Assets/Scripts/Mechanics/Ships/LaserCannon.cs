@@ -13,7 +13,7 @@ public class LaserCannon : MonoBehaviour
 
     private void Start()
     {
-        float maxShootingDistance = transform.parent.GetComponentInChildren<AttackZone>().GetRadius();
+        float maxShootingDistance = transform.parent.parent.GetComponentInChildren<AttackZone>().GetRadius();
 
         if (rateOfFire != 0)
             CreateLasers(maxShootingDistance);

@@ -12,10 +12,10 @@ public class Ship : MonoBehaviour
     [SerializeField] private float combatTurnSpeed;
 
     private NavMeshAgent agent;
-    private float radius;
+    private AttackZone attackZone;
+    private WeaponSystem[] weapons;
     private Coroutine combat;
     private UnityEvent<Ship> death;
-    private WeaponSystem[] weapons;
 
     private bool inCombat;
     private bool inChase;
@@ -26,8 +26,8 @@ public class Ship : MonoBehaviour
     private void Awake()
     {
         agent = GetComponent<NavMeshAgent>();
+        attackZone = GetComponentInChildren<AttackZone>();
         weapons = GetComponentsInChildren<WeaponSystem>();
-        radius = agent.radius;
         acceleration = agent.acceleration;
 
         inCombat = false;
@@ -79,7 +79,7 @@ public class Ship : MonoBehaviour
     {
         agent.acceleration = acceleration;
         isMoving = true;
-        agent.stoppingDistance = radius * Mathf.Sqrt(arrivalAmount * 2) + Mathf.CeilToInt(arrivalIndex/2) * radius;
+        agent.stoppingDistance = agent.radius * Mathf.Sqrt(arrivalAmount * 2) + Mathf.CeilToInt(arrivalIndex/2) * agent.radius;
         agent.isStopped = false;
 
         agent.SetDestination(position);
@@ -152,7 +152,7 @@ public class Ship : MonoBehaviour
 
         while (ship != null && ship.IsAlive())
         {
-            if (!GetAttackZone().IsOutside(ship))
+            if (!attackZone.IsOutside(ship))
             {
                 if (!IsShooting())
                 {
@@ -188,11 +188,11 @@ public class Ship : MonoBehaviour
         StopShooting();
         Move(ship);
 
-        while (ship != null && ship.IsAlive() && GetAttackZone().IsOutside(ship))
+        while (ship != null && ship.IsAlive() && attackZone.IsOutside(ship))
         {
             Vector3 shipPos = ship.transform.position;
 
-            if ((agent.destination - shipPos).magnitude > GetAttackZone().GetRadius())
+            if ((agent.destination - shipPos).magnitude > attackZone.GetRadius())
                 Move(shipPos);
 
             yield return null;
@@ -228,11 +228,6 @@ public class Ship : MonoBehaviour
     private bool IsShooting()
     {
         return weapons[0].IsShooting();
-    }
-
-    private AttackZone GetAttackZone()
-    {
-        return weapons[0].GetAttackZone();
     }
 
     public bool IsMoving()

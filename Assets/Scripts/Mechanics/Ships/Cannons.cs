@@ -5,13 +5,11 @@ public class Cannons : WeaponSystem
 {
     [SerializeField] private float shootingDelay;
 
-    private AttackZone zone;
     private LaserCannon[] cannons;
     private Coroutine shootingStart;
 
     private void Awake()
     {
-        zone = GetComponentInChildren<AttackZone>();
         cannons = GetComponentsInChildren<LaserCannon>();
     }
 
@@ -42,10 +40,5 @@ public class Cannons : WeaponSystem
 
             yield return new WaitForSeconds(shootingDelay);
         }
-    }
-
-    public override AttackZone GetAttackZone()
-    {
-        return zone;
     }
 }

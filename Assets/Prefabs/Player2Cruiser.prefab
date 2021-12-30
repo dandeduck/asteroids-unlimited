@@ -30,7 +30,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 7897858508372476393}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &7951587409944743202
 MonoBehaviour:
@@ -44,7 +44,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8f7e7bde960d24064b3d946cba173495, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rateOfFire: 4
+  rateOfFire: 3
   ammunition: {fileID: 6568902252918242097, guid: 0427c9d105d0f4701a35d678ee456b3e,
     type: 3}
 --- !u!1 &2270612297255531503
@@ -81,6 +81,7 @@ Transform:
   m_Children:
   - {fileID: 7516058025765039672}
   - {fileID: 7897858508372476393}
+  - {fileID: 3286952744197201999}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -179,7 +180,6 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 3286952744197201999}
   - {fileID: 2433456050041592770}
   - {fileID: 5068311428481343079}
   m_Father: {fileID: 2270612297255531506}
@@ -197,7 +197,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 986fe25c3af21420b87e6c661fac93ba, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  shootingDelay: 100
+  shootingDelay: 0.075
 --- !u!1 &5703232273542633112
 GameObject:
   m_ObjectHideFlags: 0
@@ -228,7 +228,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 7897858508372476393}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &2584518514996722258
 MonoBehaviour:
@@ -242,7 +242,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8f7e7bde960d24064b3d946cba173495, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rateOfFire: 4
+  rateOfFire: 3
   ammunition: {fileID: 6568902252918242097, guid: 0427c9d105d0f4701a35d678ee456b3e,
     type: 3}
 --- !u!1 &7462060218598202602
@@ -256,7 +256,6 @@ GameObject:
   - component: {fileID: 3286952744197201999}
   - component: {fileID: 343089236945256553}
   - component: {fileID: 2264700368545072006}
-  - component: {fileID: 7975027999334337154}
   m_Layer: 9
   m_Name: AttackZone
   m_TagString: Untagged
@@ -276,8 +275,8 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 7897858508372476393}
-  m_RootOrder: 0
+  m_Father: {fileID: 2270612297255531506}
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &343089236945256553
 MonoBehaviour:
@@ -304,21 +303,6 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 0.75
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &7975027999334337154
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7462060218598202602}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8f7e7bde960d24064b3d946cba173495, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  rateOfFire: 4
-  ammunition: {fileID: 6568902252918242097, guid: 61dd49b08ee5a44538a5336f69c22633,
-    type: 3}
 --- !u!1001 &8053807837279652307
 PrefabInstance:
   m_ObjectHideFlags: 0

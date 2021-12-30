@@ -29,7 +29,6 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 2689705408127043950}
   - {fileID: 992528024501405490}
   - {fileID: 5970036912158635451}
   m_Father: {fileID: 2270612297255531506}
@@ -47,7 +46,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 986fe25c3af21420b87e6c661fac93ba, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  shootingDelay: 10
+  shootingDelay: 0.075
 --- !u!1 &2270612297255531503
 GameObject:
   m_ObjectHideFlags: 0
@@ -82,6 +81,7 @@ Transform:
   m_Children:
   - {fileID: 6847108761893473492}
   - {fileID: 4100327429997128226}
+  - {fileID: 2689705408127043950}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -167,7 +167,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &5970036912158635451
 Transform:
   m_ObjectHideFlags: 0
@@ -181,7 +181,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 4100327429997128226}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1045289018130923171
 MonoBehaviour:
@@ -195,7 +195,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8f7e7bde960d24064b3d946cba173495, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rateOfFire: 4
+  rateOfFire: 3
   ammunition: {fileID: 6568902252918242097, guid: 61dd49b08ee5a44538a5336f69c22633,
     type: 3}
 --- !u!1 &5072542872296716270
@@ -209,7 +209,6 @@ GameObject:
   - component: {fileID: 2689705408127043950}
   - component: {fileID: 8635832891748159308}
   - component: {fileID: 5984048116728705888}
-  - component: {fileID: 4455516395104123198}
   m_Layer: 9
   m_Name: AttackZone
   m_TagString: Untagged
@@ -229,8 +228,8 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 4100327429997128226}
-  m_RootOrder: 0
+  m_Father: {fileID: 2270612297255531506}
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &8635832891748159308
 MonoBehaviour:
@@ -257,21 +256,6 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 0.75
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &4455516395104123198
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5072542872296716270}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8f7e7bde960d24064b3d946cba173495, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  rateOfFire: 4
-  ammunition: {fileID: 6568902252918242097, guid: 61dd49b08ee5a44538a5336f69c22633,
-    type: 3}
 --- !u!1 &5694545196773863968
 GameObject:
   m_ObjectHideFlags: 0
@@ -302,7 +286,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 4100327429997128226}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &885690512579612805
 MonoBehaviour:
@@ -316,7 +300,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8f7e7bde960d24064b3d946cba173495, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rateOfFire: 4
+  rateOfFire: 3
   ammunition: {fileID: 6568902252918242097, guid: 61dd49b08ee5a44538a5336f69c22633,
     type: 3}
 --- !u!1001 &6381433929770822463
