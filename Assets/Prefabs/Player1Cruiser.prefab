@@ -46,7 +46,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 986fe25c3af21420b87e6c661fac93ba, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  shootingDelay: 0.075
 --- !u!1 &2270612297255531503
 GameObject:
   m_ObjectHideFlags: 0
@@ -195,7 +194,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8f7e7bde960d24064b3d946cba173495, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rateOfFire: 5
+  rateOfFire: 4
   ammunition: {fileID: 6568902252918242097, guid: 61dd49b08ee5a44538a5336f69c22633,
     type: 3}
 --- !u!1 &5072542872296716270
@@ -300,7 +299,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8f7e7bde960d24064b3d946cba173495, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rateOfFire: 5
+  rateOfFire: 4
   ammunition: {fileID: 6568902252918242097, guid: 61dd49b08ee5a44538a5336f69c22633,
     type: 3}
 --- !u!1001 &6381433929770822463
