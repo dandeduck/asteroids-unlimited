@@ -269,4 +269,9 @@ public class Ship : MonoBehaviour
     {
         return constructionTime;
     }
+
+    public int GetSize()
+    {
+        return size;
+    }
 }

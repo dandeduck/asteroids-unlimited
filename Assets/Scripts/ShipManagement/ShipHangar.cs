@@ -13,16 +13,22 @@ public class ShipHangar : MonoBehaviour
     private FinanceManager financeManager;
     private Queue<Ship> buildQueue;
     private Coroutine buildingRoutine;
+    private int currentMaxArmySize;
+    private int currentSize;
 
     private void Awake()
     {
         buildQueue = new Queue<Ship>();
         financeManager = shipManager.GetFinanceManager();
+        currentMaxArmySize = 0;
     }
 
     public bool BuyShip(Ship ship)
     {
         if (buildQueue.Count >= queueSize)
+            return false;
+        
+        if (currentMaxArmySize + ship.GetSize() > capacity)
             return false;
         
         if (!financeManager.Spend(ship.GetCost()))
@@ -36,6 +42,7 @@ public class ShipHangar : MonoBehaviour
     private void StartConstruction(Ship ship)
     {
         buildQueue.Enqueue(ship);
+        currentMaxArmySize += ship.GetSize();
 
         if (buildingRoutine == null)
             buildingRoutine = StartCoroutine(Construction());
@@ -46,8 +53,19 @@ public class ShipHangar : MonoBehaviour
         if (index < buildQueue.Count)
         {
             if (buildingRoutine != null)
+            {
                 StopCoroutine(buildingRoutine);
-            buildQueue = new Queue<Ship>(buildQueue.Where((ship, i) => i != index));
+                buildingRoutine = null;
+            }
+
+            buildQueue = new Queue<Ship>(buildQueue.Where((ship, i) => 
+            {
+                if (i != index)
+                    return true;
+                
+                currentMaxArmySize -= ship.GetSize();
+                return false;
+            }));
         }
     }
 
@@ -60,7 +78,10 @@ public class ShipHangar : MonoBehaviour
             yield return new WaitForSeconds(ship.GetConstructionTime());
 
             buildQueue.Dequeue();
+            currentSize += ship.GetSize();
             ship = Instantiate(ship, transform.position, transform.rotation);
+
+            ship.AddDeathListener(OnShipDeath);
             ship.SetManager(shipManager);
             ship.Move(waypoint);
 
@@ -68,5 +89,12 @@ public class ShipHangar : MonoBehaviour
         }
 
         buildingRoutine = null;
+    }
+
+    private void OnShipDeath(Ship killed)
+    {
+        int size = killed.GetSize();
+        currentSize -= size;
+        currentMaxArmySize -= size;
     }
 }
