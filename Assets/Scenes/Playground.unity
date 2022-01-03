@@ -333,7 +333,19 @@ PrefabInstance:
       propertyPath: m_Name
       value: Mothership (1)
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    - target: {fileID: 9157623855937048399, guid: c415c0b7b5f6748848e7a5910ed5924f,
+        type: 3}
+      propertyPath: frigateShip
+      value: 
+      objectReference: {fileID: 2270612297255531501, guid: 5964d53f2aa014113b1ae0c3a571f0d0,
+        type: 3}
+    - target: {fileID: 9157623855937048399, guid: c415c0b7b5f6748848e7a5910ed5924f,
+        type: 3}
+      propertyPath: shipManager
+      value: 
+      objectReference: {fileID: 4975917}
+    m_RemovedComponents:
+    - {fileID: 4500144874402183573, guid: c415c0b7b5f6748848e7a5910ed5924f, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: c415c0b7b5f6748848e7a5910ed5924f, type: 3}
 --- !u!1 &1072228706
 GameObject:
@@ -462,6 +474,17 @@ PrefabInstance:
       propertyPath: manager
       value: 
       objectReference: {fileID: 1145044540}
+    - target: {fileID: 6874198654522190992, guid: ec86ad40fd9cd42c3a4e0e78a5279b04,
+        type: 3}
+      propertyPath: frigateShip
+      value: 
+      objectReference: {fileID: 2270612297255531501, guid: 8932301dffa614efba6c2fd1d18b77e4,
+        type: 3}
+    - target: {fileID: 6874198654522190992, guid: ec86ad40fd9cd42c3a4e0e78a5279b04,
+        type: 3}
+      propertyPath: shipManager
+      value: 
+      objectReference: {fileID: 1145044540}
     - target: {fileID: 8426252577893781892, guid: ec86ad40fd9cd42c3a4e0e78a5279b04,
         type: 3}
       propertyPath: m_RootOrder
@@ -527,7 +550,8 @@ PrefabInstance:
       propertyPath: shipManager
       value: 
       objectReference: {fileID: 1145044540}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 8885240943228471313, guid: ec86ad40fd9cd42c3a4e0e78a5279b04, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: ec86ad40fd9cd42c3a4e0e78a5279b04, type: 3}
 --- !u!1 &1873391443
 GameObject:
