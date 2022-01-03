@@ -6,8 +6,6 @@ public class Captureable : MonoBehaviour
 {
     [SerializeField] private float captureDuration;
 
-    public float progress {get;}
-
     private Dictionary<ShipManager, float> captureProgress;
     private List<Ship> capturingShips;
     private ShipManager capturer;

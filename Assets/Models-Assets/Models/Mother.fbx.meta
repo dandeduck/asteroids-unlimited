@@ -24,6 +24,11 @@ ModelImporter:
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
+      name: Holograpic
+    second: {fileID: 2100000, guid: 2422f7706984c8341bfe3776adfa50de, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
       name: Material
     second: {fileID: -876546973899608171, guid: ffd337668ebe3e04b8e517921ed6a523,
       type: 3}
