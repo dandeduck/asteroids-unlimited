@@ -19,8 +19,12 @@ public class ShipHangar : MonoBehaviour
     private void Awake()
     {
         buildQueue = new Queue<Ship>();
-        financeManager = shipManager.GetFinanceManager();
         currentMaxArmySize = 0;
+    }
+
+    private void Start()
+    {
+        financeManager = shipManager.GetFinanceManager();
     }
 
     public bool BuyShip(Ship ship)
@@ -30,7 +34,7 @@ public class ShipHangar : MonoBehaviour
         
         if (currentMaxArmySize + ship.GetSize() > capacity)
             return false;
-        
+
         if (!financeManager.Spend(ship.GetCost()))
             return false;
 
@@ -79,10 +83,10 @@ public class ShipHangar : MonoBehaviour
 
             buildQueue.Dequeue();
             currentSize += ship.GetSize();
-            ship = Instantiate(ship, transform.position, transform.rotation);
+            ship = Instantiate(ship, transform.position, transform.rotation, transform.parent.parent); // scene as parent
 
+            shipManager.AddShip(ship);
             ship.AddDeathListener(OnShipDeath);
-            ship.SetManager(shipManager);
             ship.Move(waypoint);
 
             yield return null;

@@ -144,6 +144,26 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 604df156ff91f477e9167ecdf786d665, type: 3}
+--- !u!1 &4402083126127337236 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5970065299304387677, guid: 604df156ff91f477e9167ecdf786d665,
+    type: 3}
+  m_PrefabInstance: {fileID: 8056580768159435593}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &8885240943228471313
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4402083126127337236}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bdaf43a990764494dafa999a1a4c23f3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  frigateShip: {fileID: 2270612297255531501, guid: 8932301dffa614efba6c2fd1d18b77e4,
+    type: 3}
 --- !u!4 &6463050078417002064 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3927108399589233945, guid: 604df156ff91f477e9167ecdf786d665,

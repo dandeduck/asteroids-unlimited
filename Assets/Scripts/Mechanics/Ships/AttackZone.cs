@@ -80,6 +80,8 @@ public class AttackZone : MonoBehaviour
 
     public float GetRadius()
     {
+        if (radius == 0) // this needs to be fixed better
+            return GetComponent<SphereCollider>().radius;
         return radius;
     }
 }

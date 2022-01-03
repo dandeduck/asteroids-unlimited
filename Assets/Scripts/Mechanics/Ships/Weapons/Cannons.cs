@@ -3,6 +3,8 @@ using UnityEngine;
 
 public class Cannons : WeaponSystem
 {
+    [SerializeField] private AttackZone attackZone;
+
     private float shootingDelay;
     private LaserCannon[] cannons;
     private Coroutine shootingStart;
@@ -14,7 +16,7 @@ public class Cannons : WeaponSystem
 
     private void Start() // Must have same lasers I guess
     {
-        shootingDelay = transform.parent.GetComponentInChildren<AttackZone>().GetRadius() / cannons[0].GetComponentInChildren<Laser>().GetSpeed() / 2;
+        shootingDelay = attackZone.GetRadius() / cannons[0].GetComponentInChildren<Laser>().GetSpeed() / 2;
     }
 
     public override bool IsShooting()

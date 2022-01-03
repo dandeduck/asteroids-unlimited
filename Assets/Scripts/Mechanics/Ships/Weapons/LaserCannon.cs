@@ -12,10 +12,10 @@ public class LaserCannon : MonoBehaviour
     private int shotCount;
     private bool isShooting;
 
-    private void Awake()
+    private void OnEnable()
     {
         float maxShootingDistance = attackZone.GetRadius();
-
+        
         if (rateOfFire != 0)
             CreateLasers(maxShootingDistance);
     }
