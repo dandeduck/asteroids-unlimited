@@ -115,6 +115,7 @@ public class Ship : MonoBehaviour
         if (combat != null)
         {
             StopAllCoroutines();
+            StopShooting();
             inCombat = false;
             inChase = false;
             target = null;
