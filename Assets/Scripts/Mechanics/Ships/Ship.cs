@@ -254,4 +254,19 @@ public class Ship : MonoBehaviour
     {
         return manager;
     }
+
+    public void SetManager(ShipManager manager)
+    {
+        this.manager = manager;
+    }
+
+    public float GetCost()
+    {
+        return cost;
+    }
+
+    public float GetConstructionTime()
+    {
+        return constructionTime;
+    }
 }
