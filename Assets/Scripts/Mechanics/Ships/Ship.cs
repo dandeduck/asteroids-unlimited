@@ -9,26 +9,25 @@ public class Ship : MonoBehaviour
 
     [SerializeField] private ShipManager manager;
     [SerializeField] private float health;
-    [SerializeField] private float damage;
-    [SerializeField] private float fireRateSeconds;
     [SerializeField] private float combatTurnSpeed;
 
     private NavMeshAgent agent;
     private AttackZone attackZone;
-    private float radius;
+    private WeaponSystem[] weapons;
     private Coroutine combat;
+    private UnityEvent<Ship> death;
+
     private bool inCombat;
     private bool inChase;
     private bool isMoving;
     private Ship target;
-    private UnityEvent<Ship> death;
     private float acceleration;
 
     private void Awake()
     {
         agent = GetComponent<NavMeshAgent>();
         attackZone = GetComponentInChildren<AttackZone>();
-        radius = agent.radius;
+        weapons = GetComponentsInChildren<WeaponSystem>();
         acceleration = agent.acceleration;
 
         inCombat = false;
@@ -41,11 +40,11 @@ public class Ship : MonoBehaviour
     {
         if (target != null && target.IsAlive() && inCombat && !inChase)
             LookAtTarget();
-        if (inCombat || HasReachedDestinastion() && isMoving)
+        if (inCombat || HasReachedDestination() && isMoving)
             isMoving = false;
     }
 
-    private bool HasReachedDestinastion()
+    private bool HasReachedDestination()
     {
         return agent.pathStatus == NavMeshPathStatus.PathComplete && agent.remainingDistance <= agent.stoppingDistance;
     }
@@ -60,12 +59,10 @@ public class Ship : MonoBehaviour
 
     public void OnDeselect()
     {
-        GetComponentInChildren<Renderer>().material.color = Color.black;
     }
 
     public void OnSelect()
     {
-        GetComponentInChildren<Renderer>().material.color = Color.red;
     }
 
     public void Move(Ship ship)
@@ -82,7 +79,7 @@ public class Ship : MonoBehaviour
     {
         agent.acceleration = acceleration;
         isMoving = true;
-        agent.stoppingDistance = radius * Mathf.Sqrt(arrivalAmount * 2) + Mathf.CeilToInt(arrivalIndex/2) * radius;
+        agent.stoppingDistance = agent.radius * Mathf.Sqrt(arrivalAmount * 2) + Mathf.CeilToInt(arrivalIndex/2) * agent.radius;
         agent.isStopped = false;
 
         agent.SetDestination(position);
@@ -105,9 +102,12 @@ public class Ship : MonoBehaviour
 
     public void StopMovement()
     {
-        agent.acceleration *= 3;
-        isMoving = false;
-        agent.isStopped = true;
+        if (IsAlive())
+        {
+            agent.acceleration *= 3;
+            isMoving = false;
+            agent.isStopped = true;
+        }
     }
 
     public void StopCombat()
@@ -115,6 +115,7 @@ public class Ship : MonoBehaviour
         if (combat != null)
         {
             StopAllCoroutines();
+            StopShooting();
             inCombat = false;
             inChase = false;
             target = null;
@@ -141,18 +142,9 @@ public class Ship : MonoBehaviour
         return health > 0;
     }
 
-    public float GetDamagePerSecond()
-    {
-        return damage / fireRateSeconds;
-    }
-
     public bool IsInCombat()
     {
         return inCombat;
-    }
-
-    private void OnAttack(Ship ship)
-    {
     }
 
     private IEnumerator Combat(Ship ship, bool shouldChase)
@@ -161,7 +153,17 @@ public class Ship : MonoBehaviour
 
         while (ship != null && ship.IsAlive())
         {
-            if (attackZone.IsOutside(ship))
+            if (!attackZone.IsOutside(ship))
+            {
+                if (!IsShooting())
+                {
+                    inCombat = true;
+                    yield return RotateTowards(ship);
+                    target = ship;
+                    StartShooting(ship);
+                }
+            }
+            else
             {
                 if (shouldChase)
                 {
@@ -174,40 +176,17 @@ public class Ship : MonoBehaviour
                     yield break;
                 }
             }
-            else
-            {
-                inChase = false;
 
-                if (target == null)
-                {
-                    inCombat = true;
-                    yield return RotateTowards(ship);
-                    target = ship;
-                }
-
-                if (ship != null && ship.IsAlive())
-                {
-                    OnAttack(ship);
-                    ship.TakeDamage(damage);
-                }
-            }
-
-            if (inChase)
-            {
-                inChase = false;
-                yield return null;
-            }
-            else
-                yield return new WaitForSeconds(1/fireRateSeconds);
+            yield return null;
         }
 
         inCombat = false;
         target = null;
-        yield break;
     }
 
     private IEnumerator Chase(Ship ship)
     {
+        StopShooting();
         Move(ship);
 
         while (ship != null && ship.IsAlive() && attackZone.IsOutside(ship))
@@ -233,6 +212,23 @@ public class Ship : MonoBehaviour
             transform.rotation = Quaternion.Slerp(transform.rotation, wantedRotation, Time.deltaTime * combatTurnSpeed);
             yield return null;
         }
+    }
+    
+    private void StartShooting(Ship ship)
+    {
+        for (int i = 0; i < weapons.Length; i++)
+            weapons[i].StartShooting(ship);
+    }
+
+    private void StopShooting()
+    {
+        for (int i = 0; i < weapons.Length; i++)
+            weapons[i].StopShooting();
+    }
+
+    private bool IsShooting()
+    {
+        return weapons[0].IsShooting();
     }
 
     public bool IsMoving()
