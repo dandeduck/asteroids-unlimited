@@ -97,7 +97,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9392d37ff60574a78a3948da3ba4039e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  manager: {fileID: 4891612553413256085, guid: 691c7f1f0dd134a8dba0d31cea6c213c, type: 3}
+  manager: {fileID: 0}
   health: 100
   combatTurnSpeed: 3
 --- !u!135 &7637438030621581676

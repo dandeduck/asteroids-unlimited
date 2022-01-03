@@ -21,8 +21,6 @@ public class Captureable : MonoBehaviour
 
     private void Start()
     {
-        //TODO:
-        //fix
         foreach (ShipManager manager in Object.FindObjectsOfType<ShipManager>())
             captureProgress.Add(manager, 0);
     }
