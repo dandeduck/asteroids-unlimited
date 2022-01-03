@@ -11,6 +11,10 @@ public class Ship : MonoBehaviour
     [SerializeField] private float health;
     [SerializeField] private float combatTurnSpeed;
 
+    [SerializeField] private float cost;
+    [SerializeField] private float constructionTime;
+    [SerializeField] private int size;
+
     private NavMeshAgent agent;
     private AttackZone attackZone;
     private WeaponSystem[] weapons;

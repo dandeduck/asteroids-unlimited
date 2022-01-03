@@ -99,6 +99,9 @@ MonoBehaviour:
   manager: {fileID: 0}
   health: 100
   combatTurnSpeed: 3
+  cost: 0
+  constructionTime: 5
+  size: 1
 --- !u!135 &7637438030621581676
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -226,6 +229,11 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 6568902252918242097, guid: 61dd49b08ee5a44538a5336f69c22633,
         type: 3}
+    - target: {fileID: 7679364198662519209, guid: e22877bb8dd314d538deec9f4175ba5b,
+        type: 3}
+      propertyPath: attackZone
+      value: 
+      objectReference: {fileID: 8635832891748159308}
     - target: {fileID: 7718647647625195038, guid: e22877bb8dd314d538deec9f4175ba5b,
         type: 3}
       propertyPath: m_RootOrder
@@ -392,6 +400,11 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 6568902252918242097, guid: 61dd49b08ee5a44538a5336f69c22633,
         type: 3}
+    - target: {fileID: 7679364198662519209, guid: e22877bb8dd314d538deec9f4175ba5b,
+        type: 3}
+      propertyPath: attackZone
+      value: 
+      objectReference: {fileID: 8635832891748159308}
     - target: {fileID: 7718647647625195038, guid: e22877bb8dd314d538deec9f4175ba5b,
         type: 3}
       propertyPath: m_RootOrder
