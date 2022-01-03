@@ -3,6 +3,7 @@ using UnityEngine;
 
 public class LaserCannon : MonoBehaviour
 {
+    [SerializeField] private AttackZone attackZone;
     [SerializeField] private float rateOfFire;
     [SerializeField] private Laser ammunition;
 
@@ -11,10 +12,10 @@ public class LaserCannon : MonoBehaviour
     private int shotCount;
     private bool isShooting;
 
-    private void Awake()
+    private void OnEnable()
     {
-        float maxShootingDistance = transform.parent.parent.GetComponentInChildren<AttackZone>().GetRadius();
-
+        float maxShootingDistance = attackZone.GetRadius();
+        
         if (rateOfFire != 0)
             CreateLasers(maxShootingDistance);
     }

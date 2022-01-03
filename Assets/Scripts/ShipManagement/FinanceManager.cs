@@ -18,7 +18,7 @@ public class FinanceManager : MonoBehaviour
 
     public bool Spend(float amount)
     {
-        if (balance > amount)
+        if (balance >= amount)
         {
             balance -= amount;
 

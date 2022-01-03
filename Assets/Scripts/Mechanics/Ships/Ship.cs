@@ -11,6 +11,10 @@ public class Ship : MonoBehaviour
     [SerializeField] private float health;
     [SerializeField] private float combatTurnSpeed;
 
+    [SerializeField] private float cost;
+    [SerializeField] private float constructionTime;
+    [SerializeField] private int size;
+
     private NavMeshAgent agent;
     private AttackZone attackZone;
     private WeaponSystem[] weapons;
@@ -40,8 +44,11 @@ public class Ship : MonoBehaviour
     {
         if (target != null && target.IsAlive() && inCombat && !inChase)
             LookAtTarget();
-        if (inCombat || HasReachedDestination() && isMoving)
+        if (HasReachedDestination() && isMoving)
+        {
             isMoving = false;
+            agent.isStopped = true;
+        }
     }
 
     private bool HasReachedDestination()
@@ -79,7 +86,7 @@ public class Ship : MonoBehaviour
     {
         agent.acceleration = acceleration;
         isMoving = true;
-        agent.stoppingDistance = agent.radius * Mathf.Sqrt(arrivalAmount * 2) + Mathf.CeilToInt(arrivalIndex/2) * agent.radius;
+        agent.stoppingDistance = 0.1f + agent.radius * Mathf.Sqrt(arrivalAmount * 2) + Mathf.CeilToInt(arrivalIndex/2) * agent.radius;
         agent.isStopped = false;
 
         agent.SetDestination(position);
@@ -148,7 +155,7 @@ public class Ship : MonoBehaviour
     }
 
     private IEnumerator Combat(Ship ship, bool shouldChase)
-    {        
+    {
         inCombat = true;
 
         while (ship != null && ship.IsAlive())
@@ -249,5 +256,25 @@ public class Ship : MonoBehaviour
     public ShipManager GetManager()
     {
         return manager;
+    }
+
+    public void SetManager(ShipManager manager)
+    {
+        this.manager = manager;
+    }
+
+    public float GetCost()
+    {
+        return cost;
+    }
+
+    public float GetConstructionTime()
+    {
+        return constructionTime;
+    }
+
+    public int GetSize()
+    {
+        return size;
     }
 }

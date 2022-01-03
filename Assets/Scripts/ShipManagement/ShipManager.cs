@@ -11,8 +11,12 @@ public class ShipManager : MonoBehaviour
     private void Awake()
     {
         selector = GetComponent<ShipSelector>();
-        finance = GetComponent<FinanceManager>();
         ships = new Dictionary<int, Ship>();
+    }
+
+    private void OnEnable()
+    {
+        finance = GetComponent<FinanceManager>();
     }
 
     //This code is temporary. It is to be used until proper enemy system is implemented
