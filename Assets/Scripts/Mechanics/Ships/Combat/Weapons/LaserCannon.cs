@@ -2,6 +2,8 @@ using UnityEngine;
 
 public class LaserCannon : Weapon
 {
+    private const float MAX_SHOOTING_OFFSET = 10f;
+
     [SerializeField] private Laser ammunition;
 
     private Laser[] lasers;
@@ -21,7 +23,10 @@ public class LaserCannon : Weapon
 
     public override bool CanShootAt(Ship target)
     {
-        return true;
+        Vector3 targetAdjusted = new Vector3(target.transform.position.x, transform.position.y, target.transform.position.z) - transform.position;
+        Quaternion wantedRotation = Quaternion.LookRotation(targetAdjusted, Vector3.up);
+
+        return (wantedRotation.eulerAngles - transform.rotation.eulerAngles).magnitude < MAX_SHOOTING_OFFSET;
     }
 
     private void CreateLasers()
