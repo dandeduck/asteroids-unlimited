@@ -18,7 +18,7 @@ public class AttackZone : MonoBehaviour
 
     public Ship GetClosestShip()
     {
-        List<Ship> ships = attackableShips.Values.ToList();
+        List<Ship> ships = attackableShips.Values.ToList().FindAll(ship => ship.IsAlive());
 
         if (ships.Count > 0)
         {

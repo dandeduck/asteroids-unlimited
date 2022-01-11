@@ -1,35 +1,34 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class CombatController : MonoBehaviour
 {
     private const float ANGLE_THRESHOLD = 5f;
 
-    private Coroutine combat;
-
     private Ship ship;
     private Weapon[] weapons;
+    private AttackZone attackZone;
+
     private float minRange;
     private bool isInCombat;
+    private Coroutine combat;
 
     private void Awake()
     {
         ship = GetComponent<Ship>();
         weapons = GetComponentsInChildren<Weapon>();
+        attackZone = GetComponentInChildren<AttackZone>();
 
         minRange = FindMinRange();
     }
 
     private void Update()
     {
-        if (!isInCombat)
-        {
-            
-        }
+        if (!isInCombat && !ship.IsMoving() && !attackZone.IsEmpty())
+            Attack(attackZone.GetClosestShip());//TODO: not attack if abstracted?
     }
 
-    public void ManualAttack(Ship target)
+    public void Attack(Ship target)
     {
         ship.StopMovement();
         StopCombat();
@@ -43,6 +42,7 @@ public class CombatController : MonoBehaviour
         StopAllCoroutines();
         ship.StopMovement();
         StopShooting();
+        isInCombat = false;
     }
 
     private void Target(Ship target)
@@ -81,12 +81,12 @@ public class CombatController : MonoBehaviour
             {
                 ship.StopMovement();
                 yield return RotateTowards(target);
-
             }
 
             yield return null;
         }
 
+        isInCombat = false;
         ship.StopMovement();
         StopShooting();
     }

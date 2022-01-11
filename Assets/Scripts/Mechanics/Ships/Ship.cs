@@ -84,7 +84,7 @@ public class Ship : MonoBehaviour
 
     public void Attack(Ship ship)
     {
-        combatController.ManualAttack(ship);
+        combatController.Attack(ship);
     }
 
     public void StopCombat()
@@ -94,12 +94,9 @@ public class Ship : MonoBehaviour
 
     public void StopMovement()
     {
-        if (IsAlive())
-        {
-            agent.acceleration = acceleration * 3;
-            isMoving = false;
-            agent.isStopped = true;
-        }
+        agent.acceleration = acceleration * 3;
+        isMoving = false;
+        agent.isStopped = true;
     }
 
     public void TakeDamage(float damage)
@@ -120,6 +117,11 @@ public class Ship : MonoBehaviour
     public bool IsAlive()
     {
         return health > 0;
+    }
+
+    public bool IsMoving()
+    {
+        return isMoving;
     }
 
     public void AddDeathListener(UnityAction<Ship> action)
