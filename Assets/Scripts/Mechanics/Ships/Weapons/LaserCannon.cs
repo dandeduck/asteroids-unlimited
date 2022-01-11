@@ -1,63 +1,32 @@
-using System.Collections;
 using UnityEngine;
 
-public class LaserCannon : MonoBehaviour
+public class LaserCannon : Weapon
 {
-    [SerializeField] private AttackZone attackZone;
-    [SerializeField] private float rateOfFire;
     [SerializeField] private Laser ammunition;
 
     private Laser[] lasers;
-    private Coroutine shooting;
     private int shotCount;
-    private bool isShooting;
 
     private void OnEnable()
-    {
-        float maxShootingDistance = attackZone.GetRadius();
-        
-        if (rateOfFire != 0)
-            CreateLasers(maxShootingDistance);
+    {        
+        if (GetRateOfFire() != 0)
+            CreateLasers();
     }
 
-    public bool IsShooting()
+    public override void Shoot(Ship target)
     {
-        return isShooting;
+        lasers[shotCount%lasers.Length].Shoot(target);
+        shotCount++;
     }
 
-    public void StopShooting()
+    public override bool CanShootAt(Ship target)
     {
-        if (shooting != null)
-            StopCoroutine(shooting);
-        
-        isShooting = false;
+        return true;
     }
 
-    public void StartShooting(Ship target)
+    private void CreateLasers()
     {
-        StopShooting();
-
-        shooting = StartCoroutine(Shoot(target));
-    }
-
-    private IEnumerator Shoot(Ship target)
-    {
-        isShooting = true;
-
-        while (target != null)
-        {
-            lasers[shotCount%lasers.Length].Shoot(target);
-            shotCount++;
-
-            yield return new WaitForSeconds(1/rateOfFire);
-        }
-
-        isShooting = false;
-    }
-
-    private void CreateLasers(float distance)
-    {
-        int laserAmount = Mathf.CeilToInt(distance / ammunition.GetSpeed() * rateOfFire);
+        int laserAmount = Mathf.CeilToInt(GetRange() / ammunition.GetSpeed() * GetRateOfFire());
         lasers = new Laser[laserAmount];
 
         for (int i = 0; i < laserAmount; i++)

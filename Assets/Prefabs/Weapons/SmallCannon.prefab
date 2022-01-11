@@ -44,5 +44,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8f7e7bde960d24064b3d946cba173495, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  attackZone: {fileID: 0}
+  range: 0.75
   rateOfFire: 4
   ammunition: {fileID: 0}

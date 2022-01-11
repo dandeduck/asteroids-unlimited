@@ -54,6 +54,7 @@
         "temp/":true,
         "Temp/":true,
         "UserSettings":true,
-        "userSettings":true
+        "userSettings":true,
+        "Logs":true
     }
 }

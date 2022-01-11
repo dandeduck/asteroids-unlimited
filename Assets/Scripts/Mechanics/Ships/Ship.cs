@@ -17,7 +17,7 @@ public class Ship : MonoBehaviour
 
     private NavMeshAgent agent;
     private AttackZone attackZone;
-    private WeaponSystem[] weapons;
+    private Weapon[] weapons;
     private Coroutine combat;
     private UnityEvent<Ship> death;
 
@@ -31,7 +31,7 @@ public class Ship : MonoBehaviour
     {
         agent = GetComponent<NavMeshAgent>();
         attackZone = GetComponentInChildren<AttackZone>();
-        weapons = GetComponentsInChildren<WeaponSystem>();
+        weapons = GetComponentsInChildren<Weapon>();
         acceleration = agent.acceleration;
 
         inCombat = false;
@@ -122,7 +122,6 @@ public class Ship : MonoBehaviour
         if (combat != null)
         {
             StopAllCoroutines();
-            StopShooting();
             inCombat = false;
             inChase = false;
             target = null;
@@ -158,16 +157,15 @@ public class Ship : MonoBehaviour
     {
         inCombat = true;
 
-        while (ship != null && ship.IsAlive())
+        while (ship != null)
         {
-            if (!attackZone.IsOutside(ship))
+            if (weapons[0].IsInRange(ship))//TODO closest weapon
             {
                 if (!IsShooting())
                 {
                     inCombat = true;
                     yield return RotateTowards(ship);
                     target = ship;
-                    StartShooting(ship);
                 }
             }
             else
@@ -193,10 +191,9 @@ public class Ship : MonoBehaviour
 
     private IEnumerator Chase(Ship ship)
     {
-        StopShooting();
         Move(ship);
 
-        while (ship != null && ship.IsAlive() && attackZone.IsOutside(ship))
+        while (ship != null && !weapons[0].IsInRange(ship))//TODO: same
         {
             Vector3 shipPos = ship.transform.position;
 
@@ -219,18 +216,6 @@ public class Ship : MonoBehaviour
             transform.rotation = Quaternion.Slerp(transform.rotation, wantedRotation, Time.deltaTime * combatTurnSpeed);
             yield return null;
         }
-    }
-    
-    private void StartShooting(Ship ship)
-    {
-        for (int i = 0; i < weapons.Length; i++)
-            weapons[i].StartShooting(ship);
-    }
-
-    private void StopShooting()
-    {
-        for (int i = 0; i < weapons.Length; i++)
-            weapons[i].StopShooting();
     }
 
     private bool IsShooting()

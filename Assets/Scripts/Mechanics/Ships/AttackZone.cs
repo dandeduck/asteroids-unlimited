@@ -14,21 +14,37 @@ public class AttackZone : MonoBehaviour
         attackableShips = new Dictionary<int, Ship>();
         radius = GetComponent<SphereCollider>().radius;
         ship = GetComponentInParent<Ship>();
-        nonUnits = LayerMask.GetMask("NonUnits");
     }
 
-    private void Update()
+    public Ship GetClosestShip()
     {
-        if (!ship.IsInCombat() && attackableShips.Count > 0)
-        {
-            List<Ship> ships = attackableShips.Values.ToList();
+        List<Ship> ships = attackableShips.Values.ToList();
 
-            if (ships.Count > 0)
-            {
-                ShipsUtil.SortShipsByDistance(ships, transform.position);
-                ship.Attack(ships[0], true); // can be false also.... may depend on ship or something
-            }
+        if (ships.Count > 0)
+        {
+            ShipsUtil.SortShipsByDistance(ships, transform.position);
+            
+            return ships[0];
         }
+
+        return null;
+    }
+
+    public bool Contains(Ship ship)
+    {
+        return attackableShips.ContainsKey(ship.GetInstanceID());
+    }
+
+    public bool IsEmpty()
+    {
+        return attackableShips.Count == 0;
+    }
+
+    public float GetRadius()
+    {
+        if (radius == 0) // this needs to be fixed better
+            return GetComponent<SphereCollider>().radius;
+        return radius;
     }
 
     private void OnTriggerEnter(Collider other)
@@ -53,35 +69,5 @@ public class AttackZone : MonoBehaviour
 
         if (ship != null && attackableShips.ContainsKey(ship.GetInstanceID()))
             attackableShips.Remove(ship.GetInstanceID());
-    }
-
-    public Ship[] GetShipsInside()
-    {
-        return attackableShips.Values.ToArray();
-    }
-
-    public bool IsOutside(Ship ship)
-    {
-        return IsOutside(ship, 0);
-    }
-
-    public bool IsOutside(Ship ship, float additionalSpace)
-    {
-        if (attackableShips.ContainsKey(ship.GetInstanceID()))
-            return false;
-
-        Vector3 distance = ship.transform.position - transform.position;
-
-        if (distance.magnitude > radius + additionalSpace)
-            return true;
-
-        return Physics.Raycast(transform.position, distance, radius + additionalSpace, nonUnits, QueryTriggerInteraction.Ignore);
-    }
-
-    public float GetRadius()
-    {
-        if (radius == 0) // this needs to be fixed better
-            return GetComponent<SphereCollider>().radius;
-        return radius;
     }
 }
