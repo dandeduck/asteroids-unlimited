@@ -57,7 +57,7 @@ public abstract class Weapon : MonoBehaviour
         {
             if (CanShootAt(target) && IsInRange(target))
             {
-                Shoot(target);
+                yield return Shoot(target);
                 yield return new WaitForSeconds(1 / rateOfFire);
             }
 
@@ -93,7 +93,7 @@ public abstract class Weapon : MonoBehaviour
 
     public abstract bool CanShootAt(Ship target);
 
-    protected abstract void Shoot(Ship target);
+    protected abstract IEnumerator Shoot(Ship target);
     protected virtual void OnShootingStart(Ship target) {}
     protected virtual void OnShootingStop() {}
 }

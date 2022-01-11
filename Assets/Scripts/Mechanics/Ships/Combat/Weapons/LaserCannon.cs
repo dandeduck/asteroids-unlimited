@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class LaserCannon : Weapon
@@ -15,10 +16,11 @@ public class LaserCannon : Weapon
             CreateLasers();
     }
 
-    protected override void Shoot(Ship target)
+    protected override IEnumerator Shoot(Ship target)
     {
         lasers[shotCount%lasers.Length].Shoot(target);
         shotCount++;
+        yield return new WaitForEndOfFrame();
     }
 
     public override bool CanShootAt(Ship target)
