@@ -13,7 +13,7 @@ public class LaserCannon : Weapon
             CreateLasers();
     }
 
-    public override void Shoot(Ship target)
+    protected override void Shoot(Ship target)
     {
         lasers[shotCount%lasers.Length].Shoot(target);
         shotCount++;

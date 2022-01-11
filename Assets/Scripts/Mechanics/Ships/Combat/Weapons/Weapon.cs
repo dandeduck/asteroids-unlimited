@@ -17,11 +17,11 @@ public abstract class Weapon : MonoBehaviour
             Ship closest = attackZone.GetClosestShip();
             
             if(CanShootAt(closest))
-                ShootAt(closest);
+                Target(closest);
         }
     }
 
-    public void ShootAt(Ship target)
+    public void Target(Ship target)
     {
         StopShooting();
         StartShooting(target);
@@ -34,7 +34,7 @@ public abstract class Weapon : MonoBehaviour
         OnShootingStart(target);
     }
 
-    private void StopShooting()
+    public void StopShooting()
     {
         isShooting = false;
 
@@ -91,9 +91,9 @@ public abstract class Weapon : MonoBehaviour
         return !ShipsUtil.HasObsticles(transform, distance);
     }
 
-    public abstract void Shoot(Ship target);
     public abstract bool CanShootAt(Ship target);
 
+    protected abstract void Shoot(Ship target);
     protected virtual void OnShootingStart(Ship target) {}
     protected virtual void OnShootingStop() {}
 }
