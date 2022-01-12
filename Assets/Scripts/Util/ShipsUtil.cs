@@ -21,4 +21,9 @@ public static class ShipsUtil
     {
         return Physics.Raycast(source.transform.position, direction, direction.magnitude, nonUnits, QueryTriggerInteraction.Ignore);
     }
+
+    public static float Distance(Ship first, Ship second)
+    {
+        return (first.transform.position - second.transform.position).magnitude;
+    }
 }

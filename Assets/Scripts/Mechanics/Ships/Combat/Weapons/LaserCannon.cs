@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class LaserCannon : Weapon
 {
-    private const float MAX_SHOOTING_OFFSET = 10f;
+    private const float MAX_SHOOTING_OFFSET = 0.2f;
 
     [SerializeField] private Laser ammunition;
 
@@ -28,7 +28,10 @@ public class LaserCannon : Weapon
         Vector3 targetAdjusted = new Vector3(target.transform.position.x, transform.position.y, target.transform.position.z) - transform.position;
         Quaternion wantedRotation = Quaternion.LookRotation(targetAdjusted, Vector3.up);
 
-        return (wantedRotation.eulerAngles - transform.rotation.eulerAngles).magnitude < MAX_SHOOTING_OFFSET;
+        float closeAngle = Mathf.Abs((wantedRotation.eulerAngles - transform.rotation.eulerAngles).magnitude * Mathf.Deg2Rad);
+        float distance = Mathf.Abs((transform.position - target.transform.position).magnitude);
+
+        return closeAngle < 45f * Mathf.Deg2Rad && Mathf.Tan(closeAngle) * distance <= MAX_SHOOTING_OFFSET;
     }
 
     private void CreateLasers()

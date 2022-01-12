@@ -9,7 +9,6 @@ public class CombatController : MonoBehaviour
     private Weapon[] weapons;
     private AttackZone attackZone;
 
-    private float minRange;
     private bool isInCombat;
     private Coroutine combat;
 
@@ -18,8 +17,6 @@ public class CombatController : MonoBehaviour
         ship = GetComponent<Ship>();
         weapons = GetComponentsInChildren<Weapon>();
         attackZone = GetComponentInChildren<AttackZone>();
-
-        minRange = FindMinRange();
     }
 
     private void Update()
@@ -57,17 +54,6 @@ public class CombatController : MonoBehaviour
             weapons[i].StopShooting();
     }
 
-    private float FindMinRange()
-    {
-        float smallest = -1;
-
-        for (int i = 0; i < weapons.Length; i++)
-            if (smallest == -1 || weapons[i].GetRange() < smallest)
-                smallest = weapons[i].GetRange();
-
-        return smallest;   
-    }
-
     private IEnumerator Combat(Ship target)
     {
         isInCombat = true;
@@ -80,7 +66,7 @@ public class CombatController : MonoBehaviour
             else
             {
                 ship.StopMovement();
-                yield return RotateTowards(target);
+                ship.RotateTowards(target);
             }
 
             yield return null;
@@ -89,13 +75,6 @@ public class CombatController : MonoBehaviour
         isInCombat = false;
         ship.StopMovement();
         StopShooting();
-    }
-
-    private IEnumerator RotateTowards(Ship target)
-    {
-        do {
-            yield return null;
-        } while (target != null && !ship.RotateTowards(target));
     }
 
     private bool AllWeaponsInRange(Ship target)

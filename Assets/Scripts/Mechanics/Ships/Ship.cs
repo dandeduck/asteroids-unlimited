@@ -4,8 +4,6 @@ using UnityEngine.Events;
 
 public class Ship : MonoBehaviour
 {
-    private const float ANGLE_THRESHOLD = 5f;
-
     [SerializeField] private ShipManager manager;
     [SerializeField] private float health;
     [SerializeField] private float combatTurnSpeed;
@@ -44,14 +42,12 @@ public class Ship : MonoBehaviour
         return agent.pathStatus == NavMeshPathStatus.PathComplete && agent.remainingDistance <= agent.stoppingDistance;
     }
 
-    public bool RotateTowards(Ship target)
+    public void RotateTowards(Ship target)
     {
         Vector3 targetAdjusted = new Vector3(target.transform.position.x, transform.position.y, target.transform.position.z) - transform.position;
         Quaternion wantedRotation = Quaternion.LookRotation(targetAdjusted, Vector3.up);
 
         transform.rotation = Quaternion.Slerp(transform.rotation, wantedRotation, Time.deltaTime * combatTurnSpeed);
-
-        return Mathf.Abs(wantedRotation.eulerAngles.y - transform.rotation.eulerAngles.y) <= ANGLE_THRESHOLD;
     }
 
     public void OnDeselect()
