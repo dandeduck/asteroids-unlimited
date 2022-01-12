@@ -5,20 +5,22 @@ using UnityEngine;
 
 public class ShipHangar : MonoBehaviour
 {
-    [SerializeField] private ShipManager shipManager;
     [SerializeField] private int queueSize;
     [SerializeField] private int capacity;
     [SerializeField] private Vector3 waypoint;
 
+    [SerializeField] private ShipManager shipManager;
+    // [SerializeField] private Texture
+
     private FinanceManager financeManager;
-    private Queue<Ship> buildQueue;
+    private Queue<Constructable> buildQueue;
     private Coroutine buildingRoutine;
     private int currentMaxArmySize;
     private int currentSize;
 
     private void Awake()
     {
-        buildQueue = new Queue<Ship>();
+        buildQueue = new Queue<Constructable>();
         currentMaxArmySize = 0;
     }
 
@@ -27,26 +29,26 @@ public class ShipHangar : MonoBehaviour
         financeManager = shipManager.GetFinanceManager();
     }
 
-    public bool BuyShip(Ship ship)
+    public bool BuyShip(Constructable constructable)
     {
         if (buildQueue.Count >= queueSize)
             return false;
         
-        if (currentMaxArmySize + ship.GetSize() > capacity)
+        if (currentMaxArmySize + constructable.GetSize() > capacity)
             return false;
 
-        if (!financeManager.Spend(ship.GetCost()))
+        if (!financeManager.Spend(constructable.GetCost()))
             return false;
 
-        StartConstruction(ship);
+        StartConstruction(constructable);
 
         return true;
     }
 
-    private void StartConstruction(Ship ship)
+    private void StartConstruction(Constructable constructable)
     {
-        buildQueue.Enqueue(ship);
-        currentMaxArmySize += ship.GetSize();
+        buildQueue.Enqueue(constructable);
+        currentMaxArmySize += constructable.GetSize();
 
         if (buildingRoutine == null)
             buildingRoutine = StartCoroutine(Construction());
@@ -62,7 +64,7 @@ public class ShipHangar : MonoBehaviour
                 buildingRoutine = null;
             }
 
-            buildQueue = new Queue<Ship>(buildQueue.Where((ship, i) => 
+            buildQueue = new Queue<Constructable>(buildQueue.Where((ship, i) => 
             {
                 if (i != index)
                     return true;
@@ -77,15 +79,15 @@ public class ShipHangar : MonoBehaviour
     {
         while (buildQueue.Count > 0)
         {
-            Ship ship = buildQueue.Peek();
+            Constructable constructable = buildQueue.Peek();
 
-            yield return new WaitForSeconds(ship.GetConstructionTime());
+            yield return new WaitForSeconds(constructable.GetConstructionTime());
 
             buildQueue.Dequeue();
-            currentSize += ship.GetSize();
-            ship = Instantiate(ship, transform.position, transform.rotation, transform.parent.parent); // scene as parent
+            currentSize += constructable.GetSize();
+            constructable = Instantiate(constructable, transform.position, transform.rotation, transform.parent.parent); // scene as parent
 
-            shipManager.AddShip(ship);
+            Ship ship = constructable.InitializeShip(shipManager);
             ship.AddDeathListener(OnShipDeath);
             ship.Move(waypoint);
 
@@ -97,7 +99,7 @@ public class ShipHangar : MonoBehaviour
 
     private void OnShipDeath(Ship killed)
     {
-        int size = killed.GetSize();
+        int size = killed.GetComponent<Constructable>().GetSize();
         currentSize -= size;
         currentMaxArmySize -= size;
     }

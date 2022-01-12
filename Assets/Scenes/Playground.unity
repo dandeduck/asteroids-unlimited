@@ -337,7 +337,7 @@ PrefabInstance:
         type: 3}
       propertyPath: frigateShip
       value: 
-      objectReference: {fileID: 2270612297255531501, guid: 5964d53f2aa014113b1ae0c3a571f0d0,
+      objectReference: {fileID: 2544464369428891441, guid: 8932301dffa614efba6c2fd1d18b77e4,
         type: 3}
     - target: {fileID: 9157623855937048399, guid: c415c0b7b5f6748848e7a5910ed5924f,
         type: 3}
@@ -478,7 +478,7 @@ PrefabInstance:
         type: 3}
       propertyPath: frigateShip
       value: 
-      objectReference: {fileID: 2270612297255531501, guid: 8932301dffa614efba6c2fd1d18b77e4,
+      objectReference: {fileID: 2544464369428891441, guid: 8932301dffa614efba6c2fd1d18b77e4,
         type: 3}
     - target: {fileID: 6874198654522190992, guid: ec86ad40fd9cd42c3a4e0e78a5279b04,
         type: 3}
