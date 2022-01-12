@@ -12,11 +12,11 @@ public abstract class Weapon : MonoBehaviour
 
     private void Update()
     {
-        if(!IsShooting() && !attackZone.IsEmpty())
+        if(!isShooting && !attackZone.IsEmpty())
         {
             Ship closest = attackZone.GetClosestShip();
             
-            if(CanShootAt(closest))
+            if(closest != null && CanShootAt(closest))
                 Target(closest);
         }
     }
