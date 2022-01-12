@@ -276,7 +276,7 @@ PrefabInstance:
     - target: {fileID: 8426252577893781892, guid: c415c0b7b5f6748848e7a5910ed5924f,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 8.11
+      value: 8.2
       objectReference: {fileID: 0}
     - target: {fileID: 8426252577893781892, guid: c415c0b7b5f6748848e7a5910ed5924f,
         type: 3}
@@ -286,22 +286,22 @@ PrefabInstance:
     - target: {fileID: 8426252577893781892, guid: c415c0b7b5f6748848e7a5910ed5924f,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 8.02
+      value: 8.07
       objectReference: {fileID: 0}
     - target: {fileID: 8426252577893781892, guid: c415c0b7b5f6748848e7a5910ed5924f,
         type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.36388
+      value: -0.38268325
       objectReference: {fileID: 0}
     - target: {fileID: 8426252577893781892, guid: c415c0b7b5f6748848e7a5910ed5924f,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8426252577893781892, guid: c415c0b7b5f6748848e7a5910ed5924f,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0.93144584
+      value: 0.9238796
       objectReference: {fileID: 0}
     - target: {fileID: 8426252577893781892, guid: c415c0b7b5f6748848e7a5910ed5924f,
         type: 3}
@@ -316,7 +316,7 @@ PrefabInstance:
     - target: {fileID: 8426252577893781892, guid: c415c0b7b5f6748848e7a5910ed5924f,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
+      value: 225
       objectReference: {fileID: 0}
     - target: {fileID: 8426252577893781892, guid: c415c0b7b5f6748848e7a5910ed5924f,
         type: 3}
@@ -493,7 +493,7 @@ PrefabInstance:
     - target: {fileID: 8426252577893781892, guid: ec86ad40fd9cd42c3a4e0e78a5279b04,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 1.57
+      value: 1.82
       objectReference: {fileID: 0}
     - target: {fileID: 8426252577893781892, guid: ec86ad40fd9cd42c3a4e0e78a5279b04,
         type: 3}
@@ -508,22 +508,22 @@ PrefabInstance:
     - target: {fileID: 8426252577893781892, guid: ec86ad40fd9cd42c3a4e0e78a5279b04,
         type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.93774015
+      value: 0.9205049
       objectReference: {fileID: 0}
     - target: {fileID: 8426252577893781892, guid: ec86ad40fd9cd42c3a4e0e78a5279b04,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8426252577893781892, guid: ec86ad40fd9cd42c3a4e0e78a5279b04,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.3473377
+      value: 0.3907311
       objectReference: {fileID: 0}
     - target: {fileID: 8426252577893781892, guid: ec86ad40fd9cd42c3a4e0e78a5279b04,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8426252577893781892, guid: ec86ad40fd9cd42c3a4e0e78a5279b04,
         type: 3}
@@ -533,7 +533,7 @@ PrefabInstance:
     - target: {fileID: 8426252577893781892, guid: ec86ad40fd9cd42c3a4e0e78a5279b04,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: 40.649
+      value: 46
       objectReference: {fileID: 0}
     - target: {fileID: 8426252577893781892, guid: ec86ad40fd9cd42c3a4e0e78a5279b04,
         type: 3}
@@ -831,7 +831,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_NavMeshData
       value: 
-      objectReference: {fileID: 23800000, guid: 94a5165771e034f53a49b26ca0f8267e,
+      objectReference: {fileID: 23800000, guid: 7b8bc64b607fb433193eb1f3de20f3e8,
         type: 2}
     - target: {fileID: 466502803825302955, guid: 0d44171b37d61497ca1d9d715190ba3b,
         type: 3}
@@ -857,6 +857,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1428185188226150000, guid: cf13c6cb70b084f528ec7e2f9b596da8,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1428185189455535205, guid: cf13c6cb70b084f528ec7e2f9b596da8,
         type: 3}
       propertyPath: selectionBox
