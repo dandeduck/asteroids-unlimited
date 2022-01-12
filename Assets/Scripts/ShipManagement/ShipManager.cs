@@ -13,14 +13,6 @@ public class ShipManager : MonoBehaviour
         ships = new Dictionary<int, Ship>();
     }
 
-    //This code is temporary. It is to be used until proper enemy system is implemented
-    private void Start()
-    {
-        foreach (Ship ship in Object.FindObjectsOfType<Ship>())
-            if (ship.gameObject.layer == gameObject.layer)
-                OnNewShip(ship);
-    }
-
     public List<Ship> GetShips()
     {
         return ships.Values.ToList();
