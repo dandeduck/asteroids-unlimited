@@ -8,9 +8,7 @@ public class ShipHangar : MonoBehaviour
     [SerializeField] private int queueSize;
     [SerializeField] private int capacity;
     [SerializeField] private Vector3 waypoint;
-
     [SerializeField] private ShipManager shipManager;
-    // [SerializeField] private Texture
 
     private FinanceManager financeManager;
     private Queue<Constructable> buildQueue;
@@ -26,7 +24,7 @@ public class ShipHangar : MonoBehaviour
 
     private void Start()
     {
-        financeManager = shipManager.GetFinanceManager();
+        financeManager = shipManager.GetComponent<FinanceManager>();
     }
 
     public bool BuyShip(Constructable constructable)

@@ -5,6 +5,7 @@ public class ResourceSource : MonoBehaviour
     [SerializeField] private float value;
 
     private Captureable captureable;
+    private ShipManager holder;
     private FinanceManager holderFinance;
 
     private void Awake()
@@ -16,8 +17,8 @@ public class ResourceSource : MonoBehaviour
     {
         ShipManager currentHolder = captureable.GetHolder();
 
-        if (currentHolder != null && currentHolder.GetFinanceManager() != holderFinance)
-            holderFinance = currentHolder.GetFinanceManager();
+        if (currentHolder != holder)
+            holderFinance = currentHolder.GetComponent<FinanceManager>();
 
         if (holderFinance != null)
             holderFinance.AddMoney(value * Time.deltaTime);

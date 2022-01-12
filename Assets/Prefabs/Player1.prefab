@@ -168,6 +168,7 @@ GameObject:
   - component: {fileID: 1428185189455535202}
   - component: {fileID: 1428185189455535203}
   - component: {fileID: 1428185189455535200}
+  - component: {fileID: 8193049335430100994}
   m_Layer: 7
   m_Name: Player1
   m_TagString: Untagged
@@ -270,3 +271,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   passiveIncome: 10
+--- !u!114 &8193049335430100994
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1428185189455535227}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 661e7115908f540fea9755a28147a1bc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  shipMaterial: {fileID: 2100000, guid: 2422f7706984c8341bfe3776adfa50de, type: 2}

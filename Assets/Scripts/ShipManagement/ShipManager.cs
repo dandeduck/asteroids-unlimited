@@ -5,7 +5,6 @@ using UnityEngine;
 public class ShipManager : MonoBehaviour
 {
     private ShipSelector selector;
-    private FinanceManager finance;
     private Dictionary<int, Ship> ships;
 
     private void Awake()
@@ -14,22 +13,12 @@ public class ShipManager : MonoBehaviour
         ships = new Dictionary<int, Ship>();
     }
 
-    private void OnEnable()
-    {
-        finance = GetComponent<FinanceManager>();
-    }
-
     //This code is temporary. It is to be used until proper enemy system is implemented
     private void Start()
     {
         foreach (Ship ship in Object.FindObjectsOfType<Ship>())
             if (ship.gameObject.layer == gameObject.layer)
                 OnNewShip(ship);
-    }
-
-    public FinanceManager GetFinanceManager()
-    {
-        return finance;
     }
 
     public List<Ship> GetShips()
@@ -63,7 +52,7 @@ public class ShipManager : MonoBehaviour
 
     private void OnDestroyed(Ship ship)
     {
-        selector.DeselectShip(ship);
+        selector.DeselectShip(ship);//MOVE TO THE EVENT THING
         ships.Remove(ship.GetInstanceID());
 
         Destroy(ship.gameObject, Time.deltaTime);

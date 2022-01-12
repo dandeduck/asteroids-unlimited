@@ -1,7 +1,6 @@
 using UnityEngine;
-using UnityEngine.Events;
 
-public class Constructable : MonoBehaviour
+public abstract class Constructable : MonoBehaviour
 {
     [SerializeField] private float cost;
     [SerializeField] private float constructionTime;
@@ -18,6 +17,8 @@ public class Constructable : MonoBehaviour
     {
         manager.AddShip(ship);
         ship.SetManager(manager);
+
+        SetupIdentifiers(manager.GetComponent<Identifiers>());
 
         return ship;
     }
@@ -36,4 +37,6 @@ public class Constructable : MonoBehaviour
     {
         return size;
     }
+
+    protected abstract void SetupIdentifiers(Identifiers identifiers);
 }
