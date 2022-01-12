@@ -92,8 +92,8 @@ public abstract class Weapon : MonoBehaviour
     }
 
     public abstract bool CanShootAt(Ship target);
+    public abstract IEnumerator Shoot(Ship target);
 
-    protected abstract IEnumerator Shoot(Ship target);
     protected virtual void OnShootingStart(Ship target) {}
     protected virtual void OnShootingStop() {}
 }

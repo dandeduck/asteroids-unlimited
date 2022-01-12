@@ -1,7 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
-public class LaserCannon : Weapon
+public class LaserCannon : DirectionalWeapon
 {
     private const float MAX_SHOOTING_OFFSET = 0.2f;
 
@@ -16,22 +16,11 @@ public class LaserCannon : Weapon
             CreateLasers();
     }
 
-    protected override IEnumerator Shoot(Ship target)
+    public override IEnumerator Shoot(Ship target)
     {
         lasers[shotCount%lasers.Length].Shoot(target);
         shotCount++;
         yield return new WaitForEndOfFrame();
-    }
-
-    public override bool CanShootAt(Ship target)
-    {
-        Vector3 targetAdjusted = new Vector3(target.transform.position.x, transform.position.y, target.transform.position.z) - transform.position;
-        Quaternion wantedRotation = Quaternion.LookRotation(targetAdjusted, Vector3.up);
-
-        float closeAngle = Mathf.Abs((wantedRotation.eulerAngles - transform.rotation.eulerAngles).magnitude * Mathf.Deg2Rad);
-        float distance = Mathf.Abs((transform.position - target.transform.position).magnitude);
-
-        return closeAngle < 45f * Mathf.Deg2Rad && Mathf.Tan(closeAngle) * distance <= MAX_SHOOTING_OFFSET;
     }
 
     private void CreateLasers()
