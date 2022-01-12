@@ -8,10 +8,6 @@ public class Ship : MonoBehaviour
     [SerializeField] private float health;
     [SerializeField] private float combatTurnSpeed;
 
-    [SerializeField] private float cost;
-    [SerializeField] private float constructionTime;
-    [SerializeField] private int size;
-
     private NavMeshAgent agent;
     private CombatController combatController;
     private UnityEvent<Ship> death;
@@ -135,24 +131,9 @@ public class Ship : MonoBehaviour
         return manager;
     }
 
-    public void SetManager(ShipManager manager)
+    public void SetManager(ShipManager manager)//ugh
     {
         this.manager = manager;
-    }
-
-    public float GetCost()
-    {
-        return cost;
-    }
-
-    public float GetConstructionTime()
-    {
-        return constructionTime;
-    }
-
-    public int GetSize()
-    {
-        return size;
     }
 
     public Vector3 GetDestination()

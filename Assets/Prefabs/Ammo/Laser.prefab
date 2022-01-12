@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 6568902252918242098}
   - component: {fileID: 6568902252918242097}
   m_Layer: 0
-  m_Name: BlueLaser
+  m_Name: Laser
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -108,7 +108,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: f66eb72735b414688b9cbb07da9d26db, type: 2}
+  - {fileID: 2100000, guid: dcd2bae29568f489fb157c417848d937, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

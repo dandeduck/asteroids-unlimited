@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 2731164809204868260}
   - component: {fileID: 4586780194211069583}
   m_Layer: 9
-  m_Name: Mothership
+  m_Name: Player1Mom
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -82,6 +82,12 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 8426252577893781892}
     m_Modifications:
+    - target: {fileID: 3506253265792690137, guid: 604df156ff91f477e9167ecdf786d665,
+        type: 3}
+      propertyPath: frigateShip
+      value: 
+      objectReference: {fileID: 2544464369428891441, guid: 8932301dffa614efba6c2fd1d18b77e4,
+        type: 3}
     - target: {fileID: 3927108399589233945, guid: 604df156ff91f477e9167ecdf786d665,
         type: 3}
       propertyPath: m_RootOrder
@@ -144,26 +150,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 604df156ff91f477e9167ecdf786d665, type: 3}
---- !u!1 &4402083126127337236 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 5970065299304387677, guid: 604df156ff91f477e9167ecdf786d665,
-    type: 3}
-  m_PrefabInstance: {fileID: 8056580768159435593}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &8885240943228471313
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4402083126127337236}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bdaf43a990764494dafa999a1a4c23f3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  frigateShip: {fileID: 2270612297255531501, guid: 8932301dffa614efba6c2fd1d18b77e4,
-    type: 3}
 --- !u!4 &6463050078417002064 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3927108399589233945, guid: 604df156ff91f477e9167ecdf786d665,
@@ -347,6 +333,11 @@ PrefabInstance:
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: 9f7275b4fa44dd8419a11c256aa570ac, type: 2}
+    - target: {fileID: 8214005335899467693, guid: 0de5693516ce3f348a081db5f05dc361,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: ef0267302ec8c9740b021362d06af6a9, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0de5693516ce3f348a081db5f05dc361, type: 3}
 --- !u!4 &8321149553014055370 stripped

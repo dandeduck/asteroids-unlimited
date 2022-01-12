@@ -47,4 +47,6 @@ MonoBehaviour:
   attackZone: {fileID: 0}
   range: 0.75
   rateOfFire: 4
-  ammunition: {fileID: 0}
+  maxShootingOffset: 0.2
+  ammunition: {fileID: 6568902252918242097, guid: 61dd49b08ee5a44538a5336f69c22633,
+    type: 3}

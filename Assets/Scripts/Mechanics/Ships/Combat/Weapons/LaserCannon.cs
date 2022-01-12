@@ -16,6 +16,12 @@ public class LaserCannon : DirectionalWeapon
             CreateLasers();
     }
 
+    public void SetLaserMaterial(Material material)
+    {
+        for (int i = 0; i < lasers.Length; i++)
+            lasers[i].SetMaterial(material);
+    }
+
     public override IEnumerator Shoot(Ship target)
     {
         lasers[shotCount%lasers.Length].Shoot(target);

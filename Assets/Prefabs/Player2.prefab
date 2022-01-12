@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 4891612553413256085}
   - component: {fileID: 4891612553413256083}
   - component: {fileID: 4891612553413256082}
+  - component: {fileID: 8873488241524502128}
   m_Layer: 8
   m_Name: Player2
   m_TagString: Untagged
@@ -72,3 +73,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   passiveIncome: 10
+--- !u!114 &8873488241524502128
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4891612553413256087}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 661e7115908f540fea9755a28147a1bc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  shipMaterial: {fileID: 2100000, guid: 5dbdb82168f0645578cf95604924e153, type: 2}
+  emissiveMaterial: {fileID: 2100000, guid: c1ccd924d76fd4ff392530924b9793b5, type: 2}
+  laserMaterial: {fileID: 2100000, guid: f66eb72735b414688b9cbb07da9d26db, type: 2}
