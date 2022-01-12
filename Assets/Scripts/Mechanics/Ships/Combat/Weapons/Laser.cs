@@ -20,6 +20,11 @@ public class Laser : MonoBehaviour
         Reset();
     }
 
+    public void SetMaterial(Material material)
+    {
+        GetComponentInChildren<Renderer>().material = material;
+    }
+
     public float GetSpeed()
     {
         return speed;

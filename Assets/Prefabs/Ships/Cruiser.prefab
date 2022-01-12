@@ -241,6 +241,7 @@ MonoBehaviour:
   range: 0.75
   rateOfFire: 4
   maxShootingOffset: 0.15
+  laser: {fileID: 6568902252918242097, guid: 61dd49b08ee5a44538a5336f69c22633, type: 3}
 --- !u!1001 &736161051045835214
 PrefabInstance:
   m_ObjectHideFlags: 0

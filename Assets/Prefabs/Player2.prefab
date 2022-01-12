@@ -86,3 +86,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   shipMaterial: {fileID: 2100000, guid: 5dbdb82168f0645578cf95604924e153, type: 2}
+  emissiveMaterial: {fileID: 2100000, guid: c1ccd924d76fd4ff392530924b9793b5, type: 2}
+  laserMaterial: {fileID: 2100000, guid: f66eb72735b414688b9cbb07da9d26db, type: 2}

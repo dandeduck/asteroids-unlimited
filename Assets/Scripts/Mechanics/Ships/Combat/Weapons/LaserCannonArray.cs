@@ -3,13 +3,21 @@ using UnityEngine;
 
 public class LaserCannonArray : DirectionalWeapon
 {
+    [SerializeField] Laser laser;
+
     private LaserCannon[] cannons;
     private float shootingDelay;
 
-    private void Start()
+    private void Awake()
     {
         cannons = GetComponentsInChildren<LaserCannon>();
-        shootingDelay = GetRange() / cannons[0].GetComponentInChildren<Laser>().GetSpeed() / 2;//ugh
+        shootingDelay = GetRange() / laser.GetSpeed();
+    }
+
+    public void SetLaserMaterial(Material material)
+    {
+        for (int i = 0; i < cannons.Length; i++)
+            cannons[i].SetLaserMaterial(material);
     }
 
     public override IEnumerator Shoot(Ship target)

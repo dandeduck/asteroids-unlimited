@@ -20,18 +20,22 @@ ModelImporter:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: Emmison
-    second: {fileID: 2100000, guid: 826ed5934b307da4aa3aa8b0452cee99, type: 2}
+    second: {fileID: 2100000, guid: 5447a05c675e748a594dcd0f0ebf1982, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: Holograpic
-    second: {fileID: 2100000, guid: 2422f7706984c8341bfe3776adfa50de, type: 2}
+    second: {fileID: 2100000, guid: 5447a05c675e748a594dcd0f0ebf1982, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: Material
-    second: {fileID: -876546973899608171, guid: ffd337668ebe3e04b8e517921ed6a523,
-      type: 3}
+    second: {fileID: 2100000, guid: 5447a05c675e748a594dcd0f0ebf1982, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Solar
+    second: {fileID: 2100000, guid: 5447a05c675e748a594dcd0f0ebf1982, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0
