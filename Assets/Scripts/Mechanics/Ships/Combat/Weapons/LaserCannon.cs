@@ -1,9 +1,9 @@
 using System.Collections;
 using UnityEngine;
 
-public class LaserCannon : DirectionalWeapon
+public class LaserCannon : MonoBehaviour, Shooter
 {
-    private const float MAX_SHOOTING_OFFSET = 0.2f;
+    private const int LASER_AMOUNT = 10;
 
     [SerializeField] private Laser ammunition;
 
@@ -11,9 +11,8 @@ public class LaserCannon : DirectionalWeapon
     private int shotCount;
 
     private void OnEnable()
-    {        
-        if (GetRateOfFire() != 0)
-            CreateLasers();
+    {
+        CreateLasers();
     }
 
     public void SetLaserMaterial(Material material)
@@ -22,19 +21,18 @@ public class LaserCannon : DirectionalWeapon
             lasers[i].SetMaterial(material);
     }
 
-    public override IEnumerator Shoot(Ship target)
+    public IEnumerator Shoot(Ship target)
     {
-        lasers[shotCount%lasers.Length].Shoot(target);
+        lasers[shotCount%=lasers.Length].Shoot(target);
         shotCount++;
         yield return new WaitForEndOfFrame();
     }
 
-    private void CreateLasers()
+    private void CreateLasers() // will be turned to vfx or changed somehow to eliminate this
     {
-        int laserAmount = Mathf.CeilToInt(GetRange() / ammunition.GetSpeed() * GetRateOfFire());
-        lasers = new Laser[laserAmount];
+        lasers = new Laser[LASER_AMOUNT];
 
-        for (int i = 0; i < laserAmount; i++)
+        for (int i = 0; i < LASER_AMOUNT; i++)
         {
             lasers[i] = Instantiate(ammunition, transform.position, transform.rotation);
             lasers[i].transform.parent = transform;

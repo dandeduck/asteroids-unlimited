@@ -1,7 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
-public abstract class Weapon : MonoBehaviour
+public abstract class Weapon : MonoBehaviour, Shooter
 {
     [SerializeField] private AttackZone attackZone;
     [SerializeField] private float range;
@@ -42,11 +42,6 @@ public abstract class Weapon : MonoBehaviour
             StopCoroutine(shootingRoutine);
 
         OnShootingStop();
-    }
-
-    public bool IsShooting()
-    {
-        return isShooting;
     }
 
     protected IEnumerator Shooting(Ship target)
